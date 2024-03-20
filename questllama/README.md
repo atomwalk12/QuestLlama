@@ -1,6 +1,6 @@
-# Project Name
+# QuestLlama
 
-This version of Voyager uses the open-source Code Llama Instruct 70b model instead of ChatGPT.
+This version of Voyager uses the open-source Code Llama Instruct 70b LLM model instead of ChatGPT.
 
 ## Prerequisites
 
