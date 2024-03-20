@@ -49,7 +49,7 @@ This version of Voyager uses the open-source Code Llama Instruct 70b model inste
 
 ## Model acquisition
 
-For instructions on how to download the model, please refer to the [download_model.md](Voyager/questllama/installation/download_model.md) file.
+For instructions on how to download the model, please refer to the [model installation](installation/download-model.md) file.
 
 ## Usage
 Todo: Ongoing effort on improving this section.
