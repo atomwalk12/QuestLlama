@@ -1,0 +1,5 @@
+ipykernel
+sentence-transformers
+tqdm
+llama-cpp-python
+langchainhub
