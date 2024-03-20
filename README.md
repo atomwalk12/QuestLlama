@@ -1,4 +1,4 @@
-# QuestLlama: An Exploration of Embodied Agents and AI in Minecraft.
+# QuestLlama: Embodied Agents in Minecraft using open-source LLMs
 
 Check the original readme at: https://github.com/MineDojo/Voyager
 
@@ -6,4 +6,4 @@ Check the original readme at: https://github.com/MineDojo/Voyager
 - Summarise the essential parts of the Voyager application installation process.
 
 # QuestLlama installation
-- Direct the user at the QuestLlama [README.md](questllama/installation/download_model.md) file.
+- Direct the user at the QuestLlama [README.md](questllama/installation/download-model.md) file.
