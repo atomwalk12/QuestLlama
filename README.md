@@ -6,4 +6,4 @@ Check the original readme at: https://github.com/MineDojo/Voyager
 - Summarise the essential parts of the Voyager application installation process.
 
 # QuestLlama installation
-- Direct the user at the QuestLlama [README.md](Voyager/questllama/installation/download_model.md) file.
+- Direct the user at the QuestLlama [README.md](questllama/installation/download_model.md) file.
