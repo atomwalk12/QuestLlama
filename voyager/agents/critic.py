@@ -2,17 +2,20 @@ from voyager.prompts import load_prompt
 from voyager.utils.json_utils import fix_and_parse_json
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
+import questllama.utils as QU
 
 
 class CriticAgent:
     def __init__(
         self,
+        base_url="http://localhost:1234/v1",
         model_name="gpt-3.5-turbo",
         temperature=0,
         request_timout=120,
         mode="auto",
     ):
         self.llm = ChatOpenAI(
+            base_url=base_url,
             model_name=model_name,
             temperature=temperature,
             request_timeout=request_timout,
@@ -98,6 +101,7 @@ class CriticAgent:
         if messages[1] is None:
             return False, ""
 
+        QU.writeToFile(self.messages)
         critic = self.llm(messages).content
         print(f"\033[31m****Critic Agent ai message****\n{critic}\033[0m")
         try:

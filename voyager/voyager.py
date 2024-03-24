@@ -4,6 +4,7 @@ import os
 import time
 from typing import Dict
 
+import questllama.utils as QU
 import voyager.utils as U
 from .env import VoyagerEnv
 
@@ -203,6 +204,7 @@ class Voyager:
     def step(self):
         if self.action_agent_rollout_num_iter < 0:
             raise ValueError("Agent must be reset before stepping")
+        QU.writeToFile(self.messages)
         ai_message = self.action_agent.llm(self.messages)
         print(f"\033[34m****Action Agent ai message****\n{ai_message.content}\033[0m")
         self.conversations.append(

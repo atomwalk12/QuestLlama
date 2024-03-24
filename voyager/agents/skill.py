@@ -1,5 +1,6 @@
 import os
 
+import questllama.utils as QU
 import voyager.utils as U
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -14,6 +15,7 @@ class SkillManager:
     def __init__(
         self,
         model_name="gpt-3.5-turbo",
+        base_url="http://localhost:1234/v1",
         temperature=0,
         retrieval_top_k=5,
         request_timout=120,
@@ -22,6 +24,7 @@ class SkillManager:
     ):
         self.llm = ChatOpenAI(
             model_name=model_name,
+            base_url=base_url,
             temperature=temperature,
             request_timeout=request_timout,
         )
@@ -108,6 +111,7 @@ class SkillManager:
                 + f"The main function is `{program_name}`."
             ),
         ]
+        QU.writeToFile(self.messages)
         skill_description = f"    // { self.llm(messages).content}"
         return f"async function {program_name}(bot) {{\n{skill_description}\n}}"
 

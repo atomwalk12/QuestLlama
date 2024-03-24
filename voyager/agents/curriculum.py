@@ -3,6 +3,7 @@ from __future__ import annotations
 import random
 import re
 
+import questllama.utils as QU
 import voyager.utils as U
 from voyager.prompts import load_prompt
 from voyager.utils.json_utils import fix_and_parse_json
@@ -15,6 +16,7 @@ from langchain.vectorstores import Chroma
 class CurriculumAgent:
     def __init__(
         self,
+        base_url="http://localhost:1234/v1",
         model_name="gpt-3.5-turbo",
         temperature=0,
         qa_model_name="gpt-3.5-turbo",
@@ -27,11 +29,13 @@ class CurriculumAgent:
         core_inventory_items: str | None = None,
     ):
         self.llm = ChatOpenAI(
+            base_url=base_url,
             model_name=model_name,
             temperature=temperature,
             request_timeout=request_timout,
         )
         self.qa_llm = ChatOpenAI(
+            base_url=base_url,
             model_name=qa_model_name,
             temperature=qa_temperature,
             request_timeout=request_timout,
@@ -292,6 +296,7 @@ class CurriculumAgent:
     def propose_next_ai_task(self, *, messages, max_retries=5):
         if max_retries == 0:
             raise RuntimeError("Max retries reached, failed to propose ai task.")
+        QU.writeToFile(self.messages)
         curriculum = self.llm(messages).content
         print(f"\033[31m****Curriculum Agent ai message****\n{curriculum}\033[0m")
         try:
@@ -377,6 +382,7 @@ class CurriculumAgent:
         print(
             f"\033[31m****Curriculum Agent task decomposition****\nFinal task: {task}\033[0m"
         )
+        QU.writeToFile(self.messages)
         response = self.llm(messages).content
         print(f"\033[31m****Curriculum Agent task decomposition****\n{response}\033[0m")
         return fix_and_parse_json(response)
