@@ -1,0 +1,3 @@
+FROM codellama:70b-code-q5_K_M
+
+PARAMETER num_ctx 16384

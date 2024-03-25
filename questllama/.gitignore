@@ -1,3 +1,4 @@
 models/*
-# Todo clean up
 test_scripts_temp
+ollama/models
+secret.py

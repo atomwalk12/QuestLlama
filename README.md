@@ -7,3 +7,7 @@ Check the original readme at: https://github.com/MineDojo/Voyager
 
 # QuestLlama installation
 - Direct the user at the QuestLlama [README.md](questllama/README.md) file.
+
+FIXME: write a tutorial on how to use ollama
+# Install Ollama
+  >> curl -fsSL https://ollama.com/install.sh | sh

@@ -3,4 +3,3 @@ sentence-transformers
 tqdm
 llama-cpp-python
 langchainhub
-transformers
