@@ -3,3 +3,4 @@ sentence-transformers
 tqdm
 llama-cpp-python
 langchainhub
+chromadb

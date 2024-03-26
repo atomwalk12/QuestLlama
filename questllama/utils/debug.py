@@ -2,7 +2,7 @@ from voyager import utils as U
 import pkg_resources
 
 
-def writeToFile(lines, filename='prompts.txt'):
+def write_to_file(lines, filename='prompts.txt'):
     """
     Write lines to a file. Used to debug LM Studio prompts.
     """

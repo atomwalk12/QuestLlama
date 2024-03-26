@@ -1,12 +1,20 @@
 from questllama import QuestLlama
+from voyager import Voyager
 import os
-from questllama.secret import azure_login
 
-def run():
-    voyager = QuestLlama(
-        azure_login=azure_login
+
+azure_login = {
+    "client_id": os.environ['ql_client_id'],
+    "redirect_url": os.environ['ql_redirect_url'],
+    "secret_value": os.environ['ql_secret_value'],
+    "version": os.environ['ql_version'],
+}
+openai_api_key = os.getenv("qs_openai_api_key")
+
+
+voyager = Voyager(
+        azure_login=azure_login,
+        openai_api_key=openai_api_key,
     )
 
-
-if __name__ == "__main__":
-    run()
+voyager.learn(reset_env=False)

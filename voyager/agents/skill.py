@@ -1,11 +1,10 @@
 import os
 
-import questllama.utils as QU
 import voyager.utils as U
-from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import HumanMessage, SystemMessage
 from langchain.vectorstores import Chroma
+from questllama.utils import get_chat_client
 
 from voyager.prompts import load_prompt
 from voyager.control_primitives import load_control_primitives
@@ -15,19 +14,13 @@ class SkillManager:
     def __init__(
         self,
         model_name="gpt-3.5-turbo",
-        base_url="http://localhost:1234/v1",
         temperature=0,
         retrieval_top_k=5,
         request_timout=120,
         ckpt_dir="ckpt",
         resume=False,
     ):
-        self.llm = ChatOpenAI(
-            model_name=model_name,
-            base_url=base_url,
-            temperature=temperature,
-            request_timeout=request_timout,
-        )
+        self.llm = get_chat_client(model_name, temperature, request_timout)
         U.f_mkdir(f"{ckpt_dir}/skill/code")
         U.f_mkdir(f"{ckpt_dir}/skill/description")
         U.f_mkdir(f"{ckpt_dir}/skill/vectordb")
@@ -111,7 +104,6 @@ class SkillManager:
                 + f"The main function is `{program_name}`."
             ),
         ]
-        QU.writeToFile(self.messages)
         skill_description = f"    // { self.llm(messages).content}"
         return f"async function {program_name}(bot) {{\n{skill_description}\n}}"
 

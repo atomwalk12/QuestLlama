@@ -3,9 +3,9 @@ import time
 
 import voyager.utils as U
 from javascript import require
-from langchain.chat_models import ChatOpenAI
 from langchain.prompts import SystemMessagePromptTemplate
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
+from questllama.utils import get_chat_client
 
 from voyager.prompts import load_prompt
 from voyager.control_primitives_context import load_control_primitives_context
@@ -14,7 +14,6 @@ from voyager.control_primitives_context import load_control_primitives_context
 class ActionAgent:
     def __init__(
         self,
-        base_url="http://localhost:1234/v1",
         model_name="gpt-3.5-turbo",
         temperature=0,
         request_timout=120,
@@ -32,8 +31,7 @@ class ActionAgent:
             self.chest_memory = U.load_json(f"{ckpt_dir}/action/chest_memory.json")
         else:
             self.chest_memory = {}
-        self.llm = ChatOpenAI(
-            base_url=base_url,
+        self.llm = get_chat_client(
             model_name=model_name,
             temperature=temperature,
             request_timeout=request_timout,

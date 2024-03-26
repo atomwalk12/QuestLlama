@@ -8,7 +8,10 @@ from langchain_community.chat_models import ChatOllama
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.callbacks.stdout import StdOutCallbackHandler
 from langchain.callbacks.manager import CallbackManager
+from langchain_community.chat_models import ChatOpenAI
+import os
 
 
 def query_instruct(system_message, human_message):
@@ -34,8 +37,25 @@ def query_34b_code(system_message, human_message):
     llm([system_message, human_message])
 
 
+os.environ["OPENAI_API_KEY"] = "ollama"
+
+def query_openai(system_message, human_message):
+    llm = ChatOpenAI(
+            base_url='http://localhost:11434/v1/',
+            temperature=0.0,
+            request_timeout=600,
+            model_name="gpt-3.5-turbo",
+            streaming=True,
+            callback_manager=CallbackManager([StreamingStdOutCallbackHandler()])
+        )
+    
+    critic = llm([system_message, human_message]).content
+    print(f"\033[31m****Critic Agent ai message****\n{critic}\033[0m")
+
+
+
 class QuestLlama():
-    def __init__(self, azure_login, base_url='http://localhost:11434/api/generate'):
+    def __init__(self, azure_login, base_url='http://localhost:11434/api/generate', openai_api_key='not-needed'):
         # super().__init__(azure_login=azure_login, openai_api_key='not-needed', openai_api_request_timeout=600)
         system = U.load_text('system_message.txt')
         user = U.load_text('human_message.txt')
@@ -43,5 +63,4 @@ class QuestLlama():
 
         human_message = HumanMessage(content=user)
 
-        query_instruct(system_message, human_message)
-
+        query_openai(system_message, human_message)
