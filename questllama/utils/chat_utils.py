@@ -1,8 +1,8 @@
-
 from langchain_community.chat_models import ChatOpenAI
-from config import run_questllama
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.callbacks.manager import CallbackManager
+
+from questllama.config import run_questllama
+from .logger_callback import LoggerCallbackHandler
 
 
 def get_chat_client(model_name, temperature=0.0, request_timeout=120):
@@ -13,7 +13,7 @@ def get_chat_client(model_name, temperature=0.0, request_timeout=120):
             request_timeout=request_timeout,
             model_name=model_name,
             streaming=True,
-            callback_manager=CallbackManager([StreamingStdOutCallbackHandler()])
+            callback_manager=CallbackManager([LoggerCallbackHandler()])
         )
     else:
         return ChatOpenAI(

@@ -9,7 +9,7 @@ azure_login = {
     "secret_value": os.environ['ql_secret_value'],
     "version": os.environ['ql_version'],
 }
-openai_api_key = os.getenv("qs_openai_api_key")
+openai_api_key = os.getenv("ql_openai_api")
 
 
 voyager = Voyager(

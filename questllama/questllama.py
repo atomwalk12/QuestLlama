@@ -11,6 +11,7 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.callbacks.stdout import StdOutCallbackHandler
 from langchain.callbacks.manager import CallbackManager
 from langchain_community.chat_models import ChatOpenAI
+from questllama.utils.logger_callback import LoggerCallbackHandler
 import os
 
 
@@ -46,7 +47,7 @@ def query_openai(system_message, human_message):
             request_timeout=600,
             model_name="gpt-3.5-turbo",
             streaming=True,
-            callback_manager=CallbackManager([StreamingStdOutCallbackHandler()])
+            callback_manager=CallbackManager([LoggerCallbackHandler()])
         )
     
     critic = llm([system_message, human_message]).content
@@ -56,9 +57,15 @@ def query_openai(system_message, human_message):
 
 class QuestLlama():
     def __init__(self, azure_login, base_url='http://localhost:11434/api/generate', openai_api_key='not-needed'):
-        # super().__init__(azure_login=azure_login, openai_api_key='not-needed', openai_api_request_timeout=600)
-        system = U.load_text('system_message.txt')
-        user = U.load_text('human_message.txt')
+        authentic_message = False
+        
+        if authentic_message:
+            system = U.load_text('system_message.txt')
+            user = U.load_text('human_message.txt')
+        else:
+            system = "You are my useful assistant which helps me to learn new things. Please be as concise as possible, which means do not write many sentences."
+            user = "Please present yourself in 1 sentence."
+
         system_message = SystemMessage(content=system)
 
         human_message = HumanMessage(content=user)
