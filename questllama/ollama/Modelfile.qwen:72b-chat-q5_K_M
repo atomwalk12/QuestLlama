@@ -1,0 +1,13 @@
+# To build a new Modelfile based on this one, replace the FROM line with:
+FROM /home/razvan/.ollama/models/blobs/sha256:103d3cf8ca57359079ff0f752fd79fe2d512b78c0788ced8a1f31b18022aade4
+# FROM qwen:72b-chat-q5_K_M
+
+PARAMETER num_gpu 25
+PARAMETER num_ctx 10000
+
+TEMPLATE """<|im_start|>system
+{{ .System }}<|im_end|>
+<|im_start|>user
+{{ .Prompt }}<|im_end|>
+<|im_start|>assistant
+"""

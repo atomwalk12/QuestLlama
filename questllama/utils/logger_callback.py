@@ -5,6 +5,7 @@ from langchain_core.agents import AgentAction, AgentFinish
 from langchain_core.messages import BaseMessage
 from langchain_core.outputs import LLMResult
 from .logger import QuestLlamaLogger
+from langchain_community.chat_models import ChatOpenAI
 
 
 class LoggerCallbackHandler(BaseCallbackHandler):
@@ -28,6 +29,7 @@ class LoggerCallbackHandler(BaseCallbackHandler):
     ) -> None:
         """Run when LLM starts running."""
         self.logger.write_to_file(messages[0])
+        self.logger.log_num_tokens(messages[0])
 
     def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
         """Run on new LLM token. Only available when streaming is enabled."""
