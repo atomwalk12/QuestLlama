@@ -14,7 +14,6 @@ const Inventory = require("./lib/observation/inventory");
 const OnSave = require("./lib/observation/onSave");
 const Chests = require("./lib/observation/chests");
 const { plugin: tool } = require("mineflayer-tool");
-const minecraftHawkEye = require("minecrafthawkeye");
 
 let bot = null;
 
@@ -100,6 +99,7 @@ app.post("/start", (req, res) => {
         const tool = require("mineflayer-tool").plugin;
         const collectBlock = require("mineflayer-collectblock").plugin;
         const pvp = require("mineflayer-pvp").plugin;
+        const minecraftHawkEye = require("minecrafthawkeye");
         bot.loadPlugin(pathfinder);
         bot.loadPlugin(tool);
         bot.loadPlugin(collectBlock);

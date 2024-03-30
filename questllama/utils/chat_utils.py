@@ -10,7 +10,7 @@ logger_callback_added = False
 
 def get_chat_client(model_name, temperature=0.0, request_timeout=120):
     global logger_callback_added
-    callbacks = CallbackManager()
+    callbacks = CallbackManager([])
     
     # Add LoggerCallbackHandler only if it hasn't been added before
     if not logger_callback_added:
