@@ -2,7 +2,7 @@ import time
 import sys
 import logging
 from langchain_community.chat_models import ChatOpenAI
-import voyager.utils as U
+import questllama.utils as U
 
 class QuestLlamaLogger:
     def __init__(self, name: str):

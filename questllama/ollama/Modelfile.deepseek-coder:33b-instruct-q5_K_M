@@ -1,6 +1,6 @@
 FROM deepseek-coder:33b-instruct-q5_K_M
 
-PARAMETER num_ctx 12288
+PARAMETER num_ctx 16384
 
 TEMPLATE """{{ .System }}
 ### Instruction:

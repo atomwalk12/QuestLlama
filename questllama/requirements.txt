@@ -4,3 +4,4 @@ tqdm
 llama-cpp-python
 langchainhub
 chromadb
+gpt4all

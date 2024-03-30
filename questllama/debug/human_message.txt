@@ -24,7 +24,7 @@ Inventory (0/36): Empty
 
 Chests: None
 
-Task: Mine 1 wood log
+Task: {task}
 
 Context: You can mine one of oak, birch, spruce, jungle, acacia, dark oak, or mangrove logs.
 

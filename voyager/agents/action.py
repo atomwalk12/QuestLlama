@@ -5,7 +5,7 @@ import voyager.utils as U
 from javascript import require
 from langchain.prompts import SystemMessagePromptTemplate
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
-from questllama.utils import get_chat_client
+
 
 from voyager.prompts import load_prompt
 from voyager.control_primitives_context import load_control_primitives_context

@@ -22,7 +22,7 @@ def get_chat_client(model_name, temperature=0.0, request_timeout=120):
             base_url='http://localhost:11434/v1/',
             temperature=temperature,
             request_timeout=request_timeout,
-            model_name="deepseek-coder:33b-instruct-q5_K_M",
+            model_name=model_name,# "deepseek-coder:33b-instruct-q5_K_M",
             streaming=True,
             callback_manager=callbacks
         )
