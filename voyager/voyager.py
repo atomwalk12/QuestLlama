@@ -4,8 +4,8 @@ import os
 import time
 from typing import Dict
 
-from shared.base_client import BaseChatProvider
-from voyager.core.client_provider import VoyagerChatProvider
+from shared.client import BaseChatProvider
+from voyager.extensions.client_provider import VoyagerChatProvider
 import voyager.utils as U
 from .env import VoyagerEnv
 
@@ -50,7 +50,7 @@ class Voyager:
         ckpt_dir: str = "ckpt",
         skill_library_dir: str = None,
         resume: bool = False,
-        chat_provider: BaseChatProvider = VoyagerChatProvider
+        chat_provider: BaseChatProvider = VoyagerChatProvider,
     ):
         """
         The main class for Voyager.
@@ -102,6 +102,7 @@ class Voyager:
         :param ckpt_dir: checkpoint dir
         :param skill_library_dir: skill library dir
         :param resume: whether to resume from checkpoint
+        :param chat_provider: The API used to make calls to the LLM.
         """
         # init env
         self.env = VoyagerEnv(
@@ -126,6 +127,7 @@ class Voyager:
             resume=resume,
             chat_log=action_agent_show_chat_log,
             execution_error=action_agent_show_execution_error,
+            chat_provider=chat_provider,
         )
         self.action_agent_task_max_retries = action_agent_task_max_retries
         self.curriculum_agent = CurriculumAgent(
@@ -139,12 +141,14 @@ class Voyager:
             mode=curriculum_agent_mode,
             warm_up=curriculum_agent_warm_up,
             core_inventory_items=curriculum_agent_core_inventory_items,
+            chat_provider=chat_provider,
         )
         self.critic_agent = CriticAgent(
             model_name=critic_agent_model_name,
             temperature=critic_agent_temperature,
             request_timout=openai_api_request_timeout,
             mode=critic_agent_mode,
+            chat_provider=chat_provider,
         )
         self.skill_manager = SkillManager(
             model_name=skill_manager_model_name,
@@ -153,6 +157,7 @@ class Voyager:
             request_timout=openai_api_request_timeout,
             ckpt_dir=skill_library_dir if skill_library_dir else ckpt_dir,
             resume=True if resume or skill_library_dir else False,
+            chat_provider=chat_provider,
         )
         self.recorder = U.EventRecorder(ckpt_dir=ckpt_dir, resume=resume)
         self.resume = resume

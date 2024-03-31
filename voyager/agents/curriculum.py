@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import random
 import re
+from typing import Type
 
-from questllama.utils import get_chat_client
+from shared.client import BaseChatProvider
+from voyager.extensions.client_provider import VoyagerChatProvider
 import voyager.utils as U
 from voyager.prompts import load_prompt
 from voyager.utils.json_utils import fix_and_parse_json
@@ -25,13 +27,14 @@ class CurriculumAgent:
         mode="auto",
         warm_up=None,
         core_inventory_items: str | None = None,
+        chat_provider: Type[BaseChatProvider] = VoyagerChatProvider,
     ):
-        self.llm = get_chat_client(
+        self.llm = chat_provider(
             model_name=model_name,
             temperature=temperature,
             request_timeout=request_timout,
         )
-        self.qa_llm = get_chat_client(
+        self.qa_llm = chat_provider(
             model_name=qa_model_name,
             temperature=qa_temperature,
             request_timeout=request_timout,
@@ -292,7 +295,7 @@ class CurriculumAgent:
     def propose_next_ai_task(self, *, messages, max_retries=5):
         if max_retries == 0:
             raise RuntimeError("Max retries reached, failed to propose ai task.")
-        curriculum = self.llm(messages).content
+        curriculum = self.llm.generate(messages).content
         print(f"\033[31m****Curriculum Agent ai message****\n{curriculum}\033[0m")
         try:
             response = self.parse_ai_message(curriculum)
@@ -377,7 +380,7 @@ class CurriculumAgent:
         print(
             f"\033[31m****Curriculum Agent task decomposition****\nFinal task: {task}\033[0m"
         )
-        response = self.llm(messages).content
+        response = self.llm.generate(messages).content
         print(f"\033[31m****Curriculum Agent task decomposition****\n{response}\033[0m")
         return fix_and_parse_json(response)
 
@@ -459,7 +462,7 @@ class CurriculumAgent:
                 events=events, chest_observation=chest_observation
             ),
         ]
-        qa_response = self.qa_llm(messages).content
+        qa_response = self.qa_llm.generate(messages).content
         try:
             # Regex pattern to extract question and concept pairs
             pattern = r"Question \d+: (.+)\nConcept \d+: (.+)"
@@ -493,6 +496,6 @@ class CurriculumAgent:
             self.render_human_message_qa_step2_answer_questions(question=question),
         ]
         print(f"\033[35mCurriculum Agent Question: {question}\033[0m")
-        qa_answer = self.qa_llm(messages).content
+        qa_answer = self.qa_llm.generate(messages).content
         print(f"\033[31mCurriculum Agent {qa_answer}\033[0m")
         return qa_answer

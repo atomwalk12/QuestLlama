@@ -1,11 +1,13 @@
 import re
 import time
+from typing import Type
 
+from voyager.extensions.client_provider import VoyagerChatProvider
 import voyager.utils as U
 from javascript import require
 from langchain.prompts import SystemMessagePromptTemplate
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
-from shared import BaseClientProvider
+from shared import BaseChatProvider
 
 from voyager.prompts import load_prompt
 from voyager.control_primitives_context import load_control_primitives_context
@@ -20,7 +22,8 @@ class ActionAgent:
         ckpt_dir="ckpt",
         resume=False,
         chat_log=True,
-        execution_error=True
+        execution_error=True,
+        chat_provider: Type[BaseChatProvider] = VoyagerChatProvider,
     ):
         self.ckpt_dir = ckpt_dir
         self.chat_log = chat_log
@@ -31,7 +34,7 @@ class ActionAgent:
             self.chest_memory = U.load_json(f"{ckpt_dir}/action/chest_memory.json")
         else:
             self.chest_memory = {}
-        self.llm = get_chat_client(
+        self.llm = chat_provider(
             model_name=model_name,
             temperature=temperature,
             request_timeout=request_timout,
@@ -49,7 +52,9 @@ class ActionAgent:
                     self.chest_memory.pop(position)
             else:
                 if chest != "Invalid":
-                    print(f"\033[32mAction Agent saving chest {position}: {chest}\033[0m")
+                    print(
+                        f"\033[32mAction Agent saving chest {position}: {chest}\033[0m"
+                    )
                     self.chest_memory[position] = chest
         U.dump_json(self.chest_memory, f"{self.ckpt_dir}/action/chest_memory.json")
 
@@ -88,6 +93,7 @@ class ActionAgent:
                 "useChest",
                 "mineflayer",
             ]
+            raise Exception("This should be raised")
         programs = "\n\n".join(load_control_primitives_context(base_skills) + skills)
         response_format = load_prompt("action_response_format")
         system_message_prompt = SystemMessagePromptTemplate.from_template(

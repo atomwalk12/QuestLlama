@@ -1,10 +1,13 @@
 import os
 
+from shared.client import BaseChatProvider
+from voyager.extensions.client_provider import VoyagerChatProvider
 import voyager.utils as U
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import HumanMessage, SystemMessage
 from langchain.vectorstores import Chroma
-from questllama.utils import get_chat_client
+from typing import Type
+
 
 from voyager.prompts import load_prompt
 from voyager.control_primitives import load_control_primitives
@@ -19,8 +22,9 @@ class SkillManager:
         request_timout=120,
         ckpt_dir="ckpt",
         resume=False,
+        chat_provider: Type[BaseChatProvider] = VoyagerChatProvider,
     ):
-        self.llm = get_chat_client(model_name, temperature, request_timout)
+        self.llm = chat_provider(model_name, temperature, request_timout)
         U.f_mkdir(f"{ckpt_dir}/skill/code")
         U.f_mkdir(f"{ckpt_dir}/skill/description")
         U.f_mkdir(f"{ckpt_dir}/skill/vectordb")
@@ -104,7 +108,7 @@ class SkillManager:
                 + f"The main function is `{program_name}`."
             ),
         ]
-        skill_description = f"    // { self.llm(messages).content}"
+        skill_description = f"    // { self.llm.generate(messages).content}"
         return f"async function {program_name}(bot) {{\n{skill_description}\n}}"
 
     def retrieve_skills(self, query):
