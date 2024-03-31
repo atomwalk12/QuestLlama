@@ -24,6 +24,7 @@ from langchain_core.callbacks.manager import (
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from langchain_core.documents import Document
+import re
 
 import questllama.utils as U
 
@@ -44,8 +45,16 @@ class CustomRetriever(BaseRetriever):
         :param query: String value of the query
 
         """
+
+
+        
+        pattern = r"Task:.*\n"
+        match = re.search(pattern, query)
+        if match:
+            extracted_text = match.group()[6:]
+            print(extracted_text)
         # This method now calls the internal method that performs the actual retrieval
-        documents = self.base_retriever._get_relevant_documents(query=query, run_manager=run_manager)
+        documents = self.base_retriever._get_relevant_documents(query=extracted_text, run_manager=run_manager)
         # Store the retrieved documents for later access
         self.last_retrieved_docs = documents
 

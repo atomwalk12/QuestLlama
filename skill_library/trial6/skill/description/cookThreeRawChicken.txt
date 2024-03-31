@@ -1,0 +1,3 @@
+async function cookThreeRawChicken(bot) {
+    // The function is about cooking 3 raw chicken using a furnace and coal as fuel. First, it checks if there is a furnace in the inventory or nearby. If not, it finds a furnace within a certain distance. Then, it places the furnace near the player if it's not already placed. Finally, it smelts 3 raw chicken using coal as fuel and saves the event of cooking 3 raw chicken.
+}

@@ -1,0 +1,3 @@
+async function checkWoodenShovel(bot) {
+    // The function checks if a wooden shovel is in the inventory and sends a chat message indicating whether it is found or not.
+}

@@ -1,0 +1,3 @@
+async function craftSpyglass(bot) {
+    // The function crafts a spyglass using a crafting table, 2 copper ingots, and 1 amethyst shard. It first checks if there is a crafting table nearby or in the inventory, and if not, crafts one using oak planks. Then it places the crafting table near the player if it's not already placed. Finally, it crafts the spyglass using the crafting table and announces that the spyglass has been crafted.
+}

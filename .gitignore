@@ -131,3 +131,7 @@ run_questllama.py
 
 # Ignore vs code file
 .vscode/*
+
+# Community repos
+community
+.chroma
