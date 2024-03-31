@@ -17,7 +17,7 @@ class VoyagerChatProvider(BaseChatProvider):
 
     def generate(self, messages):
         """Generate messages using the LLM. As backend it defaults to the Chat-gpt API."""
-        return self.client(messages)
+        return self.client(messages).content
 
 
     def _get_client(self, model_name, temperature=0.0, request_timeout=120):

@@ -6,3 +6,6 @@ MODEL = "gpt-4"
 
 # The prompts are stored inside questllama under the directory defined below.
 PROMPTS_LOCATION = "logs/prompts"
+
+# LLM context length
+CONTEXT_SIZE = 16384

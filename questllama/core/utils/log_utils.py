@@ -1,5 +1,6 @@
 import sys
 import time
+import os
 from typing import Any, Dict, List
 
 import logging
@@ -9,7 +10,7 @@ from langchain_core.callbacks.base import BaseCallbackHandler
 from langchain_core.messages import BaseMessage
 from langchain_core.outputs import LLMResult
 
-import questllama.core.utils as U
+from questllama.core import file_utils as U
 import shared.config as C
 
 
@@ -22,7 +23,7 @@ class QuestLlamaLogger:
             name (str): The name of the logger.
         """
 
-        self.log_path = U.get_prompts_path(C.PROMPTS_LOCATION)
+        self.log_path = U.get_abs_path(C.PROMPTS_LOCATION)
         self.max_tokens = 4096
 
         # initialize ChatOpenAI and logger
@@ -138,3 +139,16 @@ class LoggerCallbackHandler(BaseCallbackHandler):
 
     def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> None:
         """Run on agent end."""
+
+
+class SuppressStdout:
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        self._original_stderr = sys.stderr
+        sys.stdout = open(os.devnull, "w")
+        sys.stderr = open(os.devnull, "w")
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
+        sys.stderr = self._original_stderr
