@@ -1,1 +1,1 @@
-from .questllama import QuestLlama
+from .extensions import fetch_credentials

@@ -4,6 +4,8 @@ import os
 import time
 from typing import Dict
 
+from shared.base_client import BaseChatProvider
+from voyager.core.client_provider import VoyagerChatProvider
 import voyager.utils as U
 from .env import VoyagerEnv
 
@@ -48,6 +50,7 @@ class Voyager:
         ckpt_dir: str = "ckpt",
         skill_library_dir: str = None,
         resume: bool = False,
+        chat_provider: BaseChatProvider = VoyagerChatProvider
     ):
         """
         The main class for Voyager.

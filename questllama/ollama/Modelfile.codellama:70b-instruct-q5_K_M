@@ -1,3 +1,0 @@
-FROM codellama:70b-instruct-q5_K_M
-
-PARAMETER num_ctx 4096

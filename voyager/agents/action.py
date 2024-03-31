@@ -5,7 +5,7 @@ import voyager.utils as U
 from javascript import require
 from langchain.prompts import SystemMessagePromptTemplate
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
-
+from shared import BaseClientProvider
 
 from voyager.prompts import load_prompt
 from voyager.control_primitives_context import load_control_primitives_context
@@ -20,7 +20,7 @@ class ActionAgent:
         ckpt_dir="ckpt",
         resume=False,
         chat_log=True,
-        execution_error=True,
+        execution_error=True
     ):
         self.ckpt_dir = ckpt_dir
         self.chat_log = chat_log

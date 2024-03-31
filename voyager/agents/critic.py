@@ -1,7 +1,8 @@
+from langchain.schema import HumanMessage, SystemMessage
+
 from voyager.prompts import load_prompt
 from voyager.utils.json_utils import fix_and_parse_json
-from langchain.schema import HumanMessage, SystemMessage
-from questllama.utils import get_chat_client
+from shared import get_client
 
 
 class CriticAgent:
@@ -12,7 +13,7 @@ class CriticAgent:
         request_timout=120,
         mode="auto",
     ):
-        self.llm = get_chat_client(
+        self.llm = get_client(
             model_name=model_name,
             temperature=temperature,
             request_timeout=request_timout,
@@ -50,7 +51,7 @@ class CriticAgent:
         if voxels:
             observation += f"Nearby blocks: {', '.join(voxels)}\n\n"
         else:
-            observation += f"Nearby blocks: None\n\n"
+            observation += "Nearby blocks: None\n\n"
 
         observation += f"Health: {health:.1f}/20\n\n"
         observation += f"Hunger: {hunger:.1f}/20\n\n"
@@ -71,7 +72,7 @@ class CriticAgent:
         if context:
             observation += f"Context: {context}\n\n"
         else:
-            observation += f"Context: None\n\n"
+            observation += "Context: None\n\n"
 
         print(f"\033[31m****Critic Agent human message****\n{observation}\033[0m")
         return HumanMessage(content=observation)

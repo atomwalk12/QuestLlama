@@ -1,4 +1,4 @@
-FROM ./models/TheBloke/CodeLlama-70B-Instruct-GGUF/codellama-70b-instruct.Q5_K_M.gguf
+FROM codellama:70b-instruct-q5_K_M
 
 PARAMETER num_ctx 4096
 

@@ -1,0 +1,3 @@
+[lint.extend-per-file-ignores]
+# Also ignore `E402` in all `__init__.py` files.
+"__init__.py" = ["E402"]

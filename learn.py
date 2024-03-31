@@ -1,20 +1,15 @@
-from questllama import QuestLlama
+from questllama import fetch_credentials
+from questllama.extensions.client_provider import QuestllamaClientProvider
+from shared.config import USE_QUESTLLAMA
+from voyager.core.client_provider import VoyagerClientProvider
 from voyager import Voyager
-import os
+
+# Get login credentials and launch the experiment.
+azure_login, openai_api_key = fetch_credentials()
+
+# Determine which client provider to use based on configuration
+client_provider_class = QuestllamaClientProvider if USE_QUESTLLAMA else VoyagerClientProvider
 
 
-azure_login = {
-    "client_id": os.environ['ql_client_id'],
-    "redirect_url": os.environ['ql_redirect_url'],
-    "secret_value": os.environ['ql_secret_value'],
-    "version": os.environ['ql_version'],
-}
-openai_api_key = os.getenv("ql_openai_api")
-
-
-voyager = Voyager(
-        azure_login=azure_login,
-        openai_api_key=openai_api_key,
-    )
-
-voyager.learn(reset_env=False)
+# Inject this class into the factory function
+client = Voyager(client_provider=client_provider_class, model_name="model", temperature=0.5, request_timeout=100)
