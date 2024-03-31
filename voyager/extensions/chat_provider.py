@@ -14,6 +14,12 @@ class VoyagerChatProvider(BaseChatProvider):
 
         self.client = self._get_client(model_name, temperature, request_timeout)
 
+
+    def generate(self, messages):
+        """Generate messages using the LLM. As backend it defaults to the Chat-gpt API."""
+        return self.client(messages)
+
+
     def _get_client(self, model_name, temperature=0.0, request_timeout=120):
         """
         Returns a new instance of the ChatOpenAI client with the provided parameters.

@@ -1,6 +1,6 @@
 import shared.config as Config
 from questllama.extensions.client_provider import QuestllamaClientProvider
-from voyager.extensions.client_provider import VoyagerChatProvider
+from voyager.extensions.chat_provider import VoyagerChatProvider
 
 
 def get_client(model_name, temperature, request_timeout):

@@ -20,6 +20,11 @@ class QuestllamaClientProvider(BaseChatProvider):
 
         self.client = self._get_client(model_name, temperature, request_timeout)
 
+    def generate():
+        """Generate messages using the LLM. As backend it defaults to Ollama."""
+        
+
+
     def _get_client(self, model_name, temperature=0.0, request_timeout=120):
         """
         Returns a new instance of the ChatOpenAI client with the provided parameters.

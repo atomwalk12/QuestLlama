@@ -1,1 +1,1 @@
-from .client_provider import VoyagerChatProvider
+from .chat_provider import VoyagerChatProvider

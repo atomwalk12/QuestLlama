@@ -5,7 +5,7 @@ import re
 from typing import Type
 
 from shared.client import BaseChatProvider
-from voyager.extensions.client_provider import VoyagerChatProvider
+from voyager.extensions.chat_provider import VoyagerChatProvider
 import voyager.utils as U
 from voyager.prompts import load_prompt
 from voyager.utils.json_utils import fix_and_parse_json

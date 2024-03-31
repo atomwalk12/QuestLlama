@@ -2,7 +2,7 @@ import re
 import time
 from typing import Type
 
-from voyager.extensions.client_provider import VoyagerChatProvider
+from voyager.extensions.chat_provider import VoyagerChatProvider
 import voyager.utils as U
 from javascript import require
 from langchain.prompts import SystemMessagePromptTemplate
