@@ -1,1 +1,0 @@
-from .extensions import fetch_credentials

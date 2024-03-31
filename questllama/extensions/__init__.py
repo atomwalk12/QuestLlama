@@ -1,2 +1,1 @@
 from .client_provider import QuestllamaClientProvider
-from interlink.bootstrap import get_client

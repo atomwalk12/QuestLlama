@@ -1,1 +1,2 @@
-from base_client import BaseClientProvider
+from .client import BaseChatProvider
+from .bootstrap import fetch_credentials

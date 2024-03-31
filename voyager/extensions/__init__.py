@@ -1,1 +1,1 @@
-from ...shared.base_client import BaseClientProvider
+from .client_provider import VoyagerChatProvider

@@ -2,11 +2,11 @@
 from langchain_community.chat_models import ChatOpenAI
 from langchain.callbacks.manager import CallbackManager
 
-from shared.base_client import BaseClientProvider
+from shared.client import BaseChatProvider
 from questllama.core.utils import LoggerCallbackHandler
 
 
-class QuestllamaClientProvider(BaseClientProvider):
+class QuestllamaClientProvider(BaseChatProvider):
     """A client provider for Voyager. This class allows you to get a ChatOpenAI client."""
 
     logger_callback_added = False

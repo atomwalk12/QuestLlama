@@ -13,7 +13,6 @@ import questllama.core.utils as U
 import shared.config as C
 
 
-
 class QuestLlamaLogger:
     def __init__(self, name: str):
         """
@@ -22,7 +21,7 @@ class QuestLlamaLogger:
         Parameters:
             name (str): The name of the logger.
         """
-        
+
         self.log_path = U.get_prompts_path(C.PROMPTS_LOCATION)
         self.max_tokens = 4096
 
@@ -34,7 +33,9 @@ class QuestLlamaLogger:
         self.start_time = time.strftime("%Y%m%d_%H%M%S")
         handler = logging.FileHandler(U.f_join(self.log_path, f"{self.start_time}.log"))
 
-        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
         self.logger.setLevel(logging.INFO)
@@ -55,22 +56,21 @@ class QuestLlamaLogger:
 
         tokens = self.chat.get_num_tokens(input)
         if tokens > self.max_tokens:
-            self.log('error', f"Message token size: {tokens} > {self.max_tokens}.")
+            self.log("error", f"Message token size: {tokens} > {self.max_tokens}.")
             sys.exit(1)
         else:
-            self.log('info', f"Message token size: {tokens}.")
+            self.log("info", f"Message token size: {tokens}.")
 
     def log(self, level, message):
         """
         Write a message to the logger at a given level.
         """
-        if level == 'error':
+        if level == "error":
             self.logger.error(message)
-        elif level == 'info':
+        elif level == "info":
             self.logger.info(message)
         else:
             self.logger.warning(f"Unknown log level {level}: {message}")
-
 
 
 class LoggerCallbackHandler(BaseCallbackHandler):
@@ -79,7 +79,6 @@ class LoggerCallbackHandler(BaseCallbackHandler):
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.logger = QuestLlamaLogger("prompts")
-
 
     def on_llm_start(
         self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any

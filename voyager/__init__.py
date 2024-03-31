@@ -1,2 +1,2 @@
-from .core.client_provider import VoyagerClientProvider
+from .extensions.client_provider import VoyagerChatProvider
 from .voyager import Voyager
