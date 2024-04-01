@@ -9,7 +9,7 @@ Code:
 // helper functions (only if needed, try to avoid them)
 ...
 // main function after the helper functions
-async function yourMainFunctionName(bot) {
+async function yourMainFunctionName(bot) {{
   // ...
-}
+}}
 ```
