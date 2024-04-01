@@ -101,7 +101,7 @@ class CriticAgent:
         if messages[1] is None:
             return False, ""
 
-        critic = self.llm.generate(messages).answer
+        critic = self.llm.generate(messages, 'critic').answer
         print(f"\033[31m****Critic Agent ai message****\n{critic}\033[0m")
         try:
             response = fix_and_parse_json(critic)

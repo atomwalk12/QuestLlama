@@ -22,6 +22,12 @@ def load_prompt(file):
     return load_text(f"{package_path}/prompts/{file}.txt")
 
 
+def debug_load_prompt(prompt):
+    """Load a prompt from a given file."""
+    package_path = pkg_resources.resource_filename("questllama", "core")
+    return  load_text(f"{package_path}/prompts/debugging/{prompt}")
+
+
 def get_abs_path(resource_name):
     """
     Get the absolute path of a resource file based on its name.

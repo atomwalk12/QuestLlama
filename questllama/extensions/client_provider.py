@@ -5,29 +5,28 @@ from langchain_text_splitters import (
     Language,
     RecursiveCharacterTextSplitter,
 )
-from langchain_core.callbacks.manager import (
-    AsyncCallbackManagerForRetrieverRun,
-    CallbackManagerForRetrieverRun
-)
+from langchain_core.callbacks.manager import CallbackManagerForRetrieverRun
 from langchain.chains import RetrievalQA
 from langchain.llms import Ollama
 from langchain.schema import HumanMessage, SystemMessage
-import sys
 import os
 from langchain_core.vectorstores import BaseRetriever, VectorStoreRetriever
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import List
 import re
 import questllama.core.utils.file_utils as U
 import questllama.core.utils.log_utils as L
+from rag import CRITIC
 from shared import BaseChatProvider, config as C
 from shared.messages import QuestllamaMessage
 from langchain_core.documents import Document
+from questllama.extensions.rag import CustomRetriever
+import questllama.core.utils.file_utils as U
 
 
 class QuestllamaClientProvider(BaseChatProvider):
     """A client provider for Voyager. This class allows you to get a ChatOpenAI client."""
 
-    retriever = None
+    base_retriever = None
     logger_callback_added = False
 
     def __init__(self, model_name="gpt-4", temperature=0.0, request_timeout=240):
@@ -40,14 +39,19 @@ class QuestllamaClientProvider(BaseChatProvider):
 
         self.client = self._get_client(model_name, temperature, request_timeout)
 
-        if QLCP.retriever is None:
-            QLCP.retriever = self.get_retriever(C.SKILL_PATH, C.K, C.SEARCH_TYPE)
+        if QLCP.base_retriever is None:
+            QLCP.base_retriever = self.get_retriever(C.SKILL_PATH, C.K, C.SEARCH_TYPE)
 
-    def generate(self, messages):
+    def generate(self, messages, query_type):
         """Generate messages using the LLM. As backend it defaults to Ollama."""
         assert len(messages) <= 2
         assert isinstance(messages[0], SystemMessage)
         assert isinstance(messages[1], HumanMessage)
+
+        retriever = CustomRetriever(
+            base_retriever=QLCP.base_retriever, query_type=query_type
+        )
+
         QA_CHAIN_PROMPT = PromptTemplate(
             input_variables=["context", "question"],
             template=messages[0].content,  # system prompt
@@ -55,7 +59,7 @@ class QuestllamaClientProvider(BaseChatProvider):
 
         qa_chain = RetrievalQA.from_chain_type(
             self.client,
-            retriever=QLCP.retriever,
+            retriever=retriever,
             chain_type_kwargs={"prompt": QA_CHAIN_PROMPT},
             return_source_documents=True,
         )
@@ -113,59 +117,25 @@ class QuestllamaClientProvider(BaseChatProvider):
             search_kwargs={"k": k}, search_type=search_type
         )
 
-        # Wrap it with the custom retriever
-        custom_retriever = CustomRetriever(base_retriever=base_retriever, last_retrieved_docs=[])
-
-        return custom_retriever
+        return base_retriever
 
 
 QLCP = QuestllamaClientProvider
 
 
-
-class CustomRetriever(BaseRetriever):
-    base_retriever: VectorStoreRetriever = None
-    last_retrieved_docs: List = []
-
-
-
-    def _get_relevant_documents(self, query: str, *, run_manager: CallbackManagerForRetrieverRun) -> List[Document]:
-        """
-        _get_relevant_documents is function of BaseRetriever implemented here
-
-        :param query: String value of the query
-
-        """
-
-        pattern = r"Task:.*\n"
-        match = re.search(pattern, query)
-        if match:
-            extracted_text = match.group()[6:]
-        
-        assert(len(extracted_text) > 2)
-        # This method now calls the internal method that performs the actual retrieval
-        documents = self.base_retriever._get_relevant_documents(query=extracted_text, run_manager=run_manager)
-
-        # Store the retrieved documents for later access
-        self.last_retrieved_docs = documents
-
-        return documents
-
-
 if __name__ == "__main__":
     import os
+    CURRENT = 'critic'
 
     os.environ["OPENAI_API_KEY"] = "sk-..."
+    template = U.debug_load_prompt(CURRENT + "/system.txt")
+    user = U.debug_load_prompt(CURRENT + "/user.txt")
     chat = QuestllamaClientProvider()
     msg = chat.generate(
         [
-            SystemMessage(
-                content="""Use the following pieces of context to answer the question at the end. 
-        {context}
-        Question: {question}
-        Helpful Answer:"""
-            ),
-            HumanMessage(content="Task: What is the capital of France?"),
-        ]
+            SystemMessage(content=template),
+            HumanMessage(content=user),
+        ],
+        CURRENT
     )
     print("Answer: ", msg.answer)

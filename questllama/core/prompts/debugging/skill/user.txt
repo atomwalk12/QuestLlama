@@ -1,0 +1,33 @@
+async function mineWoodLog(bot) {
+    const woodLogs = ["oak_log", "birch_log", "spruce_log", "jungle_log", "acacia_log", "dark_oak_log", "mangrove_log"];  
+    let logCount = 0;\n  while (logCount < 1) {
+        const direction = new Vec3(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1);
+        await exploreUntil(bot, direction, 60, () => {
+            for (const log of woodLogs) {
+                const block = bot.findBlock({
+                    matching: mcData.blocksByName[log].id,
+                    maxDistance: 32
+                });
+                if (block) {
+                    return block;
+                }
+            }
+            return null;
+        });
+        for (const log of woodLogs) {
+            const block = bot.findBlock({
+                matching: mcData.blocksByName[log].id,
+                maxDistance: 32
+            });
+            if (block) {
+                await mineBlock(bot, log);
+                logCount++;
+                break;
+            }
+        }
+        bot.chat(`Mined ${logCount} wood logs.`);
+    }
+    return;
+}
+
+The main function is `mineWoodLog`.
