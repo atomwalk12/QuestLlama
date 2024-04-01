@@ -63,13 +63,13 @@ npm install
 
 Voyager depends on Minecraft game. You need to install Minecraft game and set up a Minecraft instance.
 
-Follow the instructions in [Minecraft Login Tutorial](installation/minecraft_instance_install.md) to set up your Minecraft Instance.
+Follow the instructions in [Minecraft Login Tutorial](installation/voyager/minecraft_instance_install.md) to set up your Minecraft Instance.
 
 ## Fabric Mods Install
 
 You need to install fabric mods to support all the features in Voyager. Remember to use the correct Fabric version of all the mods. 
 
-Follow the instructions in [Fabric Mods Install](installation/fabric_mods_install.md) to install the mods.
+Follow the instructions in [Fabric Mods Install](installation/voyager/fabric_mods_install.md) to install the mods.
 
 # Getting Started
 Voyager uses OpenAI's GPT-4 as the language model. You need to have an OpenAI API key to use Voyager. You can get one from [here](https://platform.openai.com/account/api-keys).
@@ -143,7 +143,7 @@ Finally, you can run the sub-goals with the learned skill library:
 voyager.inference(sub_goals=sub_goals)
 ```
 
-For all valid skill libraries, see [Learned Skill Libraries](skill_library/README.md).
+For all valid skill libraries, see [Learned Skill Libraries](../../questllama/skill_library/README.md).
 
 # FAQ
 If you have any questions, please check our [FAQ](FAQ.md) first before opening an issue.

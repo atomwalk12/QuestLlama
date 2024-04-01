@@ -133,8 +133,8 @@ if __name__ == "__main__":
             continue
 
         # Prompt
-        template = U.load_prompt("rag_prompt.txt")
-        user = U.load_prompt("human_message.txt")
+        template = U.load_prompt("rag_prompt")
+        user = U.load_prompt("human_message")
         QA_CHAIN_PROMPT = PromptTemplate(
             input_variables=["context", "question"],
             template=template,
