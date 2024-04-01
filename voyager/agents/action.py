@@ -93,7 +93,6 @@ class ActionAgent:
                 "useChest",
                 "mineflayer",
             ]
-            raise Exception("This should be raised")
         programs = "\n\n".join(load_control_primitives_context(base_skills) + skills)
         response_format = load_prompt("action_response_format")
         system_message_prompt = SystemMessagePromptTemplate.from_template(

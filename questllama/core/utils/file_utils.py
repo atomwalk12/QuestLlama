@@ -22,23 +22,23 @@ def load_prompt(file):
     return load_text(f"{package_path}/core/prompts/{file}")
 
 
-def get_absolute_path(resource_name):
+def get_abs_path(resource_name):
     """
     Get the absolute path of a resource file based on its name.
     """
     return pkg_resources.resource_filename("questllama", resource_name)
 
 
-def read_skill_library():
+def read_skill_library(path):
     """
     Read all JavaScript files in the 'skill_library' directory and its subdirectories.
     """
-    skill_directory = get_absolute_path("skill_library")
+    skill_directory = get_abs_path(path)
 
     return read_files(skill_directory, extension=".js")
 
 
-def read_files(directory_path, file_extension=".js"):
+def read_files(directory_path, extension=".js"):
     """
     Read all files in a directory and its subdirectories with the specified extension.
     """
@@ -51,11 +51,11 @@ def read_files(directory_path, file_extension=".js"):
 
         # If file is a directory, recursively read its contents
         if os.path.isdir(file_path):
-            all_files += read_files(file_path, file_extension)
+            all_files += read_files(file_path, extension)
 
         else:
             # If it's not a directory and has the correct extension, add to list of files to be returned
-            if file.endswith(file_extension):
+            if file.endswith(extension):
                 with open(file_path, "r") as f:
                     all_files.append((file, f.read()))
 

@@ -10,7 +10,7 @@ from langchain_core.callbacks.base import BaseCallbackHandler
 from langchain_core.messages import BaseMessage
 from langchain_core.outputs import LLMResult
 
-from questllama.core import file_utils as U
+from questllama.core.utils import file_utils as U
 import shared.config as C
 
 
@@ -23,7 +23,7 @@ class QuestLlamaLogger:
             name (str): The name of the logger.
         """
 
-        self.log_path = U.get_abs_path(C.PROMPTS_LOCATION)
+        self.log_path = C.PROMPTS_LOCATION
         self.max_tokens = 4096
 
         # initialize ChatOpenAI and logger
