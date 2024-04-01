@@ -21,6 +21,7 @@ import questllama.core.utils.file_utils as U
 import questllama.core.utils.log_utils as L
 from shared import BaseChatProvider, config as C
 from shared.messages import QuestllamaMessage
+from langchain_core.documents import Document
 
 
 class QuestllamaClientProvider(BaseChatProvider):
@@ -40,7 +41,7 @@ class QuestllamaClientProvider(BaseChatProvider):
         self.client = self._get_client(model_name, temperature, request_timeout)
 
         if QLCP.retriever is None:
-            QLCP.retriever = self.get_retriever(C.SKILL_PATH, 10, "similarity")
+            QLCP.retriever = self.get_retriever(C.SKILL_PATH, C.K, C.SEARCH_TYPE)
 
     def generate(self, messages):
         """Generate messages using the LLM. As backend it defaults to Ollama."""
@@ -112,7 +113,10 @@ class QuestllamaClientProvider(BaseChatProvider):
             search_kwargs={"k": k}, search_type=search_type
         )
 
-        return base_retriever
+        # Wrap it with the custom retriever
+        custom_retriever = CustomRetriever(base_retriever=base_retriever, last_retrieved_docs=[])
+
+        return custom_retriever
 
 
 QLCP = QuestllamaClientProvider
@@ -141,6 +145,7 @@ class CustomRetriever(BaseRetriever):
         assert(len(extracted_text) > 2)
         # This method now calls the internal method that performs the actual retrieval
         documents = self.base_retriever._get_relevant_documents(query=extracted_text, run_manager=run_manager)
+
         # Store the retrieved documents for later access
         self.last_retrieved_docs = documents
 

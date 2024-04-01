@@ -10,9 +10,12 @@ PROMPTS_LOCATION = "logs/prompts"
 # LLM context length
 CONTEXT_SIZE = 16384
 
+# RAG configuration variables
 # RAG Tokenizer: needs to be adjusted according to the local model which is used
 TOKENIZER = "deepseek-ai/deepseek-coder-33b-instruct"
 
 # RAG skill library path
 SKILL_PATH = "skill_library"
 DB_DIR = "./chroma_db"
+K = 4
+SEARCH_TYPE = "similarity"

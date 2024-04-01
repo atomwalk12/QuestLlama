@@ -18,7 +18,7 @@ def load_text(path, by_lines=False):
 
 def load_prompt(file):
     """Load a prompt from a given file."""
-    package_path = pkg_resources.resource_filename("questllama", "")
+    package_path = pkg_resources.resource_filename("questllama", "core")
     return load_text(f"{package_path}/prompts/{file}.txt")
 
 

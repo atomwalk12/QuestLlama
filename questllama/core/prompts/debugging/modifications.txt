@@ -1,0 +1,21 @@
+These are the modifications which were made to the new prompts:
+
+1. action_template.txt
+Generate code strictly according to the given specifications. The code should be fully functional and ready to execute 
+as provided, requiring no further modifications.
+
+Use the following pieces of context to answer the question at the end. 
+{context}
+
+Question: {question}
+
+Helpful Answer:
+
+
+2. critic.txt
+Use the following pieces of context to answer the question at the end. 
+{context}
+
+Question: {question}
+
+Helpful Answer:

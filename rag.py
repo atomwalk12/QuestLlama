@@ -14,7 +14,8 @@ from langchain_text_splitters import (
 )
 from tokenizers import Tokenizer
 from langchain_core.vectorstores import BaseRetriever, VectorStoreRetriever
-  # Hypothetical base class
+from pydantic import BaseModel, Field
+# Hypothetical base class
 
 from langchain_core.callbacks.manager import (
     AsyncCallbackManagerForRetrieverRun,
@@ -26,106 +27,103 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional
 from langchain_core.documents import Document
 import re
 
-import questllama.utils as U
-
+import questllama.core.utils as U
+import pkg_resources
 import os
 import sys
+import shared.config as C
+import questllama.core.utils.file_utils as U
 
+
+CRITIC = "critic"
+ACTION = "action"
+
+
+class RAG:
+    def load_prompt(self, prompt):
+        # FIXME
+        package_path = pkg_resources.resource_filename("questllama", "core")
+        return U.load_text(f"{package_path}/prompts/temp/{prompt}")
+
+    def get_vectorstore(self, files):
+        embedding_function = GPT4AllEmbeddings()
+        # Check if the persistence directory exists
+        if os.path.exists(C.DB_DIR):
+            # Load Chroma from the existing directory
+            vectorstore = Chroma(
+                persist_directory=C.DB_DIR, embedding_function=embedding_function
+            )
+        else:
+            # Load Chroma from documents and persist to disk if the directory does not exist
+            vectorstore = Chroma.from_documents(
+                documents=files,
+                embedding=embedding_function,
+                persist_directory=C.DB_DIR,
+            )
+
+        return vectorstore
+
+    def get_documents(self):
+        # FIXME parameters
+        js_splitter = RecursiveCharacterTextSplitter.from_language(
+            language=Language.JS, chunk_size=60, chunk_overlap=0
+        )
+        js_docs = js_splitter.create_documents([doc[1] for doc in skill_library])
+        return js_docs
+
+RETRIEVER_TYPE = ''
 
 class CustomRetriever(BaseRetriever):
     base_retriever: VectorStoreRetriever = None
     last_retrieved_docs: List = []
+    _my_type: str = CRITIC
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
-
-    def _get_relevant_documents(self, query: str, *, run_manager: CallbackManagerForRetrieverRun) -> List[Document]:
+    def _get_relevant_documents(
+        self, query: str, *, run_manager: CallbackManagerForRetrieverRun
+    ) -> List[Document]:
         """
         _get_relevant_documents is function of BaseRetriever implemented here
 
         :param query: String value of the query
 
         """
+        if RETRIEVER_TYPE == CRITIC:
+            return []
 
+        if RETRIEVER_TYPE == ACTION:
+            pattern = r"Task:.*\n"
+            match = re.search(pattern, query)
+            if match:
+                extracted_text = match.group()[6:]
+                print(extracted_text)
+            # This method now calls the internal method that performs the actual retrieval
+            documents = self.base_retriever._get_relevant_documents(
+                query=extracted_text, run_manager=run_manager
+            )
+            # Store the retrieved documents for later access
+            self.last_retrieved_docs = documents
 
-        
-        pattern = r"Task:.*\n"
-        match = re.search(pattern, query)
-        if match:
-            extracted_text = match.group()[6:]
-            print(extracted_text)
-        # This method now calls the internal method that performs the actual retrieval
-        documents = self.base_retriever._get_relevant_documents(query=extracted_text, run_manager=run_manager)
-        # Store the retrieved documents for later access
-        self.last_retrieved_docs = documents
+            return documents
 
-        return documents
-
-
-
-
-class SuppressStdout:
-    def __enter__(self):
-        self._original_stdout = sys.stdout
-        self._original_stderr = sys.stderr
-        sys.stdout = open(os.devnull, 'w')
-        sys.stderr = open(os.devnull, 'w')
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        sys.stdout.close()
-        sys.stdout = self._original_stdout
-        sys.stderr = self._original_stderr
-
-
-def read_all_files(directory):
-    results = []
-    
-    for filename in os.listdir(directory):
-        filepath = os.path.join(directory, filename)
-        
-        # If it is a directory, recurse into it.
-        if os.path.isdir(filepath):
-            results += read_all_files(filepath)
-            
-        else:    # Otherwise, check the file's extension and add its path and content to the results list if it has .js extension.
-            if filename.endswith('.js'):
-                with open(filepath, 'r') as f:
-                    results.append((filename, f.read()))
-                
-    return results
-
-
-def append_elements_as_string(array):
-    result = ''
-    for element in array:
-        if element[1] not in result:
-            result += element[1] + ' '
-    return result.strip()
-
+        raise Exception("unknown operation")
 
 
 if __name__ == "__main__":
-    skill_library = read_all_files("skill_library/")
+    _TYPE = CRITIC
 
+    skill_library = U.read_skill_library("skill_library/")
 
-    chat = ChatOpenAI(openai_api_key="not-used", temperature=0.0)
-    
-    # assuming skill_library is a list of strings
-    JS_CODE = append_elements_as_string(skill_library)
-    tokens = chat.get_num_tokens(JS_CODE)
-    print(tokens)
+    rag = RAG()
+    js_docs = rag.get_documents()
 
-
-    js_splitter = RecursiveCharacterTextSplitter.from_language(
-        language=Language.JS, chunk_size=60, chunk_overlap=0
-    )
-    js_docs = js_splitter.create_documents([doc[1] for doc in skill_library])
-
-    with SuppressStdout():
-        vectorstore = Chroma.from_documents(documents=js_docs, embedding=GPT4AllEmbeddings())
-
+    vectorstore = rag.get_vectorstore(js_docs)
 
     # Prompt
     while True:
+        # i.e. Mine 1 wood log
         query = input("\nQuery: ")
         if query == "exit":
             break
@@ -133,8 +131,8 @@ if __name__ == "__main__":
             continue
 
         # Prompt
-        template = U.load_prompt("rag_prompt")
-        user = U.load_prompt("human_message")
+        template = rag.load_prompt(_TYPE + "/system.txt")
+        user = rag.load_prompt(_TYPE + "/user.txt")
         QA_CHAIN_PROMPT = PromptTemplate(
             input_variables=["context", "question"],
             template=template,
@@ -144,38 +142,27 @@ if __name__ == "__main__":
 
         # Initialize your base retriever
         # This is a placeholder - replace it with your actual vector store retriever initialization
-        base_retriever = vectorstore.as_retriever(search_kwargs={"k": 10}, search_type='similarity')
+        base_retriever = vectorstore.as_retriever(
+            search_kwargs={"k": 10}, search_type="similarity"
+        )
 
         # Wrap it with the custom retriever
-        custom_retriever = CustomRetriever(base_retriever=base_retriever, last_retrieved_docs=[])
+        custom_retriever: CustomRetriever = CustomRetriever(
+            base_retriever=base_retriever, last_retrieved_docs=[]
+        )
 
-
-        llm = Ollama(model="gpt-4", callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]), temperature=0.0)
+        llm = Ollama(
+            model="gpt-4",
+            callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),
+            temperature=0.0,
+        )
         qa_chain = RetrievalQA.from_chain_type(
             llm,
             retriever=custom_retriever,
             chain_type_kwargs={"prompt": QA_CHAIN_PROMPT},
-            return_source_documents=True
+            return_source_documents=True,
         )
 
+        RETRIEVER_TYPE = _TYPE
 
         result = qa_chain({"query": query})
-
-        tokenizer = Tokenizer.from_pretrained("deepseek-ai/deepseek-coder-33b-instruct")
-
-        for doc in result['source_documents']:
-            print(doc.page_content)
-
-        # Tokenize the retrieved documents
-        document_token_count = sum(len(tokenizer.encode(doc.page_content, add_special_tokens=True)) for doc in custom_retriever.last_retrieved_docs)
-
-        # Tokenize the QA_CHAIN_PROMPT (assuming it's represented in a format that can be directly tokenized)
-        prompt_token_count = len(tokenizer.encode(QA_CHAIN_PROMPT.template.format(context="", question=query), add_special_tokens=True))
-
-        # Tokenize the QA_CHAIN_PROMPT (assuming it's represented in a format that can be directly tokenized)
-        result_token_count = len(tokenizer.encode(result['result'], add_special_tokens=True))
-
-        # Calculate the total token count
-        total_token_count = document_token_count + prompt_token_count + result_token_count
-        print(total_token_count)
-    
