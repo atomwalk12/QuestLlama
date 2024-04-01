@@ -46,8 +46,8 @@ class QuestLlamaLogger:
         Write lines to a file. Used to debug LM Studio prompts.
         """
         for line in lines:
-            self.log("type", line.type)
-            self.log("content", line.content)
+            self.log("info", line.type)
+            self.log("info", line.text)
 
     def log_num_tokens(self, messages):
         """
@@ -103,7 +103,7 @@ class LoggerCallbackHandler(BaseCallbackHandler):
 
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> None:
         """Run when LLM ends running."""
-        self.logger.write_to_file([response.generations[0][0].message])
+        self.logger.write_to_file([response.generations[0][0]])
 
     def on_llm_error(self, error: BaseException, **kwargs: Any) -> None:
         """Run when LLM errors."""

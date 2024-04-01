@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from shared.messages import IMessageWrapper
+
 
 class BaseChatProvider(ABC):
     """Abstract base class for client providers.
@@ -15,6 +17,7 @@ class BaseChatProvider(ABC):
         self.model_name = model_name
         self.temperature = temperature
         self.request_timeout = request_timeout
+
 
     @abstractmethod
     def _get_client(self, model_name, temperature=0.0, request_timeout=120) -> object:
@@ -33,8 +36,9 @@ class BaseChatProvider(ABC):
 
 
     @abstractmethod
-    def generate(self, messages):
+    def generate(self, messages) -> IMessageWrapper:
         """
         It's responsible for generating messages using a LLM.
         """
         pass
+

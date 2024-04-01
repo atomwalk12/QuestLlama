@@ -212,9 +212,9 @@ class Voyager:
         if self.action_agent_rollout_num_iter < 0:
             raise ValueError("Agent must be reset before stepping")
         ai_message = self.action_agent.llm.generate(self.messages)
-        print(f"\033[34m****Action Agent ai message****\n{ai_message.content}\033[0m")
+        print(f"\033[34m****Action Agent ai message****\n{ai_message.answer}\033[0m")
         self.conversations.append(
-            (self.messages[0].content, self.messages[1].content, ai_message.content)
+            (self.messages[0].content, self.messages[1].content, ai_message.answer)
         )
         parsed_result = self.action_agent.process_ai_message(message=ai_message)
         success = False

@@ -1,10 +1,14 @@
 import pkg_resources
 import os
 import voyager.utils as U
+import shared.config as C
 
 
 def load_control_primitives_context(primitive_names=None):
-    package_path = pkg_resources.resource_filename("voyager", "")
+    if C.USE_QUESTLLAMA:
+        package_path = pkg_resources.resource_filename("questllama", "core")
+    else:
+        package_path = pkg_resources.resource_filename("voyager", "")
     if primitive_names is None:
         primitive_names = [
             primitive[:-3]

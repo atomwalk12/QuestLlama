@@ -1,6 +1,8 @@
 from shared.client import BaseChatProvider
 from langchain_community.chat_models import ChatOpenAI
 
+from shared.messages import VoyagerMessage
+
 
 class VoyagerChatProvider(BaseChatProvider):
     """A client provider for Voyager. This class allows you to get a ChatOpenAI client."""
@@ -17,7 +19,8 @@ class VoyagerChatProvider(BaseChatProvider):
 
     def generate(self, messages):
         """Generate messages using the LLM. As backend it defaults to the Chat-gpt API."""
-        return self.client(messages).content
+        answer = self.client(messages)
+        return VoyagerMessage(answer)
 
 
     def _get_client(self, model_name, temperature=0.0, request_timeout=120):

@@ -108,7 +108,7 @@ class SkillManager:
                 + f"The main function is `{program_name}`."
             ),
         ]
-        skill_description = f"    // { self.llm.generate(messages)}"
+        skill_description = f"    // { self.llm.generate(messages).answer }"
         return f"async function {program_name}(bot) {{\n{skill_description}\n}}"
 
     def retrieve_skills(self, query):
