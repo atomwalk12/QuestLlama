@@ -14,4 +14,5 @@ CONTEXT_SIZE = 16384
 TOKENIZER = "deepseek-ai/deepseek-coder-33b-instruct"
 
 # RAG skill library path
-SKILL_PATH = "skill_library/trial1"
+SKILL_PATH = "skill_library"
+DB_DIR = "./chroma_db"

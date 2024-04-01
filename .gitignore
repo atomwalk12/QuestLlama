@@ -135,3 +135,4 @@ run_questllama.py
 # Community repos
 community
 .chroma
+chroma_db

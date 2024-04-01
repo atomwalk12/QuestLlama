@@ -1,26 +1,22 @@
-import enum
-from math import e
-from langchain.callbacks.manager import CallbackManager
 from langchain.embeddings import GPT4AllEmbeddings
 from langchain.vectorstores import Chroma
-from langchain_community.chat_models import ChatOpenAI
 from langchain import PromptTemplate
 from langchain_text_splitters import (
     Language,
     RecursiveCharacterTextSplitter,
 )
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain_core.callbacks.manager import CallbackManagerForRetrieverRun
+from langchain_core.callbacks.manager import (
+    AsyncCallbackManagerForRetrieverRun,
+    CallbackManagerForRetrieverRun
+)
 from langchain.chains import RetrievalQA
-from langchain_core.vectorstores import BaseRetriever, VectorStoreRetriever
-from typing import List
-from langchain_core.documents import Document
-from tokenizers import Tokenizer
 from langchain.llms import Ollama
-from langchain.schema import AIMessage, HumanMessage, SystemMessage
-
+from langchain.schema import HumanMessage, SystemMessage
+import sys
+import os
+from langchain_core.vectorstores import BaseRetriever, VectorStoreRetriever
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 import re
-
 import questllama.core.utils.file_utils as U
 import questllama.core.utils.log_utils as L
 from shared import BaseChatProvider, config as C
@@ -63,80 +59,21 @@ class QuestllamaClientProvider(BaseChatProvider):
             return_source_documents=True,
         )
 
-        self.result = qa_chain({"query": messages[1].content})  # user prompt
-        self.check_token_count(system=messages[0], user=messages[1], result=self.result)
+        self.result = qa_chain(
+            {"query": messages[1].content}, callbacks=[L.LoggerCallbackHandler()]
+        )  # user prompt
 
         return QuestllamaMessage(self.result)
 
     def _get_client(self, model_name="gpt-4", temperature=0.0, request_timeout=120):
         """
-        Returns a new instance of the ChatOpenAI client with the provided parameters.
+        Returns a new instance of the Ollama client with the provided parameters.
         The handle is used to redirect output to stdout during the output generation.
         """
-        callbacks = CallbackManager([])
-
-        # Add LoggerCallbackHandler only if it hasn't been added before
-        if not QLCP.logger_callback_added:
-            callbacks.add_handler(L.LoggerCallbackHandler())
-            QLCP.logger_callback_added = (
-                True  # Mark as added in order to write data only once
-            )
 
         return Ollama(
-            temperature=temperature,
-            model=model_name,
-            callback_manager=callbacks,
+            temperature=temperature, model=model_name, timeout=request_timeout
         )
-
-        # Todo remove
-        # return ChatOpenAI(
-        #     base_url="http://localhost:11434/v1/",
-        #     temperature=temperature,
-        #     request_timeout=request_timeout,
-        #     model_name=model_name,
-        #     streaming=True,
-        #     callback_manager=callbacks,
-        # )
-
-    def check_token_count(self, user, system, result):
-        tokenizer = Tokenizer.from_pretrained(C.TOKENIZER)
-        # Find out the total number of tokens in the retrieved documents
-        document_token_count = 0
-        for doc in result["source_documents"]:
-            document_token_count += len(
-                tokenizer.encode(doc.page_content, add_special_tokens=True)
-            )
-            cleaned = doc.page_content.replace("\n", " ")
-            self.logger.log("info", f"Document Content: {cleaned}")
-
-        # Find out the number of tokens found in the system and user prompts together
-        prompt_token_count = len(
-            tokenizer.encode(
-                system.content.format(
-                    context="", question=user.content
-                ),  # user prompt, context are the documents
-                add_special_tokens=True,
-            )
-        )
-
-        # Total number of tokens stored in the final result
-        result_token_count = len(
-            tokenizer.encode(result["result"], add_special_tokens=True)
-        )
-
-        # Calculate the total token count
-        total_token_count = (
-            document_token_count + prompt_token_count + result_token_count
-        )
-
-        self.logger.log(
-            "info", f"Context window OK: {total_token_count} < {C.CONTEXT_SIZE}"
-        ) if total_token_count < C.CONTEXT_SIZE else self.logger.log(
-            "error",
-            f"Context window not OK: {total_token_count} > {C.CONTEXT_SIZE}",
-        )
-
-        assert total_token_count < C.CONTEXT_SIZE
 
     def get_retriever(self, lib_path="skill_library", k=10, search_type="similarity"):
         """
@@ -154,49 +91,56 @@ class QuestllamaClientProvider(BaseChatProvider):
             language=Language.JS, chunk_size=60, chunk_overlap=0
         )
 
-        js_docs = js_splitter.create_documents([doc[1] for doc in files])
+        embedding_function = GPT4AllEmbeddings()
+        # Check if the persistence directory exists
+        if os.path.exists(C.DB_DIR):
+            # Load Chroma from the existing directory
+            vectorstore = Chroma(
+                persist_directory=C.DB_DIR, embedding_function=embedding_function
+            )
+        else:
+            js_docs = js_splitter.create_documents([doc[1] for doc in files])
 
-        with L.SuppressStdout():
+            # Load Chroma from documents and persist to disk if the directory does not exist
             vectorstore = Chroma.from_documents(
-                documents=js_docs, embedding=GPT4AllEmbeddings()
+                documents=js_docs,
+                embedding=embedding_function,
+                persist_directory=C.DB_DIR,
             )
 
         base_retriever = vectorstore.as_retriever(
             search_kwargs={"k": k}, search_type=search_type
         )
 
-        # Wrap it with the custom retriever
-        retriever = CustomRetriever(
-            base_retriever=base_retriever, last_retrieved_docs=[]
-        )
-        return retriever
+        return base_retriever
 
 
 QLCP = QuestllamaClientProvider
+
 
 
 class CustomRetriever(BaseRetriever):
     base_retriever: VectorStoreRetriever = None
     last_retrieved_docs: List = []
 
-    def _get_relevant_documents(
-        self, query: str, *, run_manager: CallbackManagerForRetrieverRun
-    ) -> List[Document]:
+
+
+    def _get_relevant_documents(self, query: str, *, run_manager: CallbackManagerForRetrieverRun) -> List[Document]:
         """
         _get_relevant_documents is function of BaseRetriever implemented here
+
+        :param query: String value of the query
+
         """
 
         pattern = r"Task:.*\n"
         match = re.search(pattern, query)
         if match:
             extracted_text = match.group()[6:]
-            print(extracted_text)
-        else:
-            extracted_text = query
+        
+        assert(len(extracted_text) > 2)
         # This method now calls the internal method that performs the actual retrieval
-        documents = self.base_retriever._get_relevant_documents(
-            query=extracted_text, run_manager=run_manager
-        )
+        documents = self.base_retriever._get_relevant_documents(query=extracted_text, run_manager=run_manager)
         # Store the retrieved documents for later access
         self.last_retrieved_docs = documents
 

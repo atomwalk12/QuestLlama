@@ -4,8 +4,8 @@ new GoalNear(x, y, z, range); // Move the bot to a block within the specified ra
 new GoalXZ(x, z); // Useful for long-range goals that don't have a specific Y level. `x` and `z` are `number`
 new GoalGetToBlock(x, y, z); // Not get into the block, but get directly adjacent to it. Useful for fishing, farming, filling bucket, and beds. `x`, `y`, and `z` are `number`
 new GoalFollow(entity, range); // Follow the specified entity within the specified range. `entity` is `Entity`, `range` is `number`
-new GoalPlaceBlock(position, bot.world, {}); // Position the bot in order to place a block. `position` is `Vec3`
-new GoalLookAtBlock(position, bot.world, {}); // Path into a position where a blockface of the block at position is visible. `position` is `Vec3`
+new GoalPlaceBlock(position, bot.world, {{}}); // Position the bot in order to place a block. `position` is `Vec3`
+new GoalLookAtBlock(position, bot.world, {{}}); // Path into a position where a blockface of the block at position is visible. `position` is `Vec3`
 
 // These are other Mineflayer functions you can use:
 bot.isABed(bedBlock); // Return true if `bedBlock` is a bed

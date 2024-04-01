@@ -40,4 +40,7 @@ class VoyagerChatProvider(BaseChatProvider):
             model_name=model_name,
             temperature=temperature,
             request_timeout=request_timeout,
+            # base_url="http://localhost:11434/v1/",
+            # streaming=True,
+            # callback_manager=callbacks
         )

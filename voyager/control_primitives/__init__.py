@@ -5,7 +5,7 @@ import shared.config as C
 
 def load_control_primitives(primitive_names=None):
     if C.USE_QUESTLLAMA:
-        pkg_resources.resource_filename("questllama", "core")
+        package_path = pkg_resources.resource_filename("questllama", "core")
     else:
         package_path = pkg_resources.resource_filename("voyager", "")
     if primitive_names is None:

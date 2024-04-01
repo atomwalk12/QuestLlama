@@ -1,45 +1,53 @@
 import sys
 import time
-import os
+import re
 from typing import Any, Dict, List
 
 import logging
-from langchain_community.chat_models import ChatOpenAI
 from langchain_core.agents import AgentAction, AgentFinish
 from langchain_core.callbacks.base import BaseCallbackHandler
 from langchain_core.messages import BaseMessage
 from langchain_core.outputs import LLMResult
+from tokenizers import Tokenizer
 
 from questllama.core.utils import file_utils as U
 import shared.config as C
 
 
 class QuestLlamaLogger:
+    # Class-level attribute to track if the logger has been initialized
+    logger_initialized = False
+    start_time = time.strftime("%Y%m%d_%H%M%S")  # Set the start time at the class level
+
     def __init__(self, name: str):
         """
-        Initializes necessary components for logging and file handling.
+        Initializes necessary components for logging and file handling, ensuring only one log file is created.
 
         Parameters:
             name (str): The name of the logger.
         """
-
         self.log_path = C.PROMPTS_LOCATION
         self.max_tokens = 4096
-
-        # initialize ChatOpenAI and logger
-        self.chat = ChatOpenAI()
         U.f_mkdir(self.log_path)
 
         self.logger = logging.getLogger(name)
-        self.start_time = time.strftime("%Y%m%d_%H%M%S")
-        handler = logging.FileHandler(U.f_join(self.log_path, f"{self.start_time}.log"))
 
-        formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        self.logger.setLevel(logging.INFO)
+        # Ensure that logger setup is done only once
+        if not QuestLlamaLogger.logger_initialized:
+            log_file_path = U.f_join(
+                self.log_path, f"{QuestLlamaLogger.start_time}.log"
+            )
+            handler = logging.FileHandler(log_file_path, mode="a")  # Append mode
+
+            formatter = logging.Formatter(
+                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            )
+            handler.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.setLevel(logging.INFO)
+
+            # Mark as initialized to prevent further logger setup
+            QuestLlamaLogger.logger_initialized = True
 
     def write_to_file(self, lines):
         """
@@ -49,29 +57,26 @@ class QuestLlamaLogger:
             self.log("info", line.type)
             self.log("info", line.text)
 
-    def log_num_tokens(self, messages):
+    def clean_ansi_sequences(self, message: str) -> str:
         """
-        Write error if number of tokens exceeds the max limit.
+        Remove ANSI escape sequences from a string to ensure it's plain text.
         """
-        input = "\n".join([msg.content for msg in messages])
-
-        tokens = self.chat.get_num_tokens(input)
-        if tokens > self.max_tokens:
-            self.log("error", f"Message token size: {tokens} > {self.max_tokens}.")
-            sys.exit(1)
-        else:
-            self.log("info", f"Message token size: {tokens}.")
+        ansi_escape = re.compile(r"\x1B[@-_][0-?]*[ -/]*[@-~]")
+        return ansi_escape.sub("", message)
 
     def log(self, level, message):
         """
-        Write a message to the logger at a given level.
+        Write a message to the logger at a given level, after cleaning it of ANSI escape sequences.
         """
+        cleaned_message = self.clean_ansi_sequences(message)
         if level == "error":
-            self.logger.error(message)
+            self.logger.error(cleaned_message)
         elif level == "info":
-            self.logger.info(message)
+            self.logger.info(cleaned_message)
+        elif level == "warn":
+            self.logger.warning(cleaned_message)
         else:
-            self.logger.warning(f"Unknown log level {level}: {message}")
+            raise Exception(f"Unknown log level {level}: {message}")
 
 
 class LoggerCallbackHandler(BaseCallbackHandler):
@@ -79,7 +84,8 @@ class LoggerCallbackHandler(BaseCallbackHandler):
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
-        self.logger = QuestLlamaLogger("prompts")
+        self.logger = QuestLlamaLogger("OllamaAPI")
+        self.tokenizer = Tokenizer.from_pretrained(C.TOKENIZER)
 
     def on_llm_start(
         self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
@@ -94,7 +100,8 @@ class LoggerCallbackHandler(BaseCallbackHandler):
     ) -> None:
         """Run when LLM starts running."""
         self.logger.write_to_file(messages[0])
-        self.logger.log_num_tokens(messages[0])
+        num_tokens = self.log_token_count(messages[0])
+        assert num_tokens < C.CONTEXT_SIZE
 
     def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
         """Run on new LLM token. Only available when streaming is enabled."""
@@ -136,19 +143,21 @@ class LoggerCallbackHandler(BaseCallbackHandler):
 
     def on_text(self, text: str, **kwargs: Any) -> None:
         """Run on arbitrary text."""
+        self.logger.log("info", text)
+        num_tokens = self.log_token_count(text)
+        assert num_tokens < C.CONTEXT_SIZE
 
     def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> None:
         """Run on agent end."""
 
+    def log_token_count(self, text):
+        """Log to the Questllama log file message token count."""
+        num_tokens = len(self.tokenizer.encode(text, add_special_tokens=True))
 
-class SuppressStdout:
-    def __enter__(self):
-        self._original_stdout = sys.stdout
-        self._original_stderr = sys.stderr
-        sys.stdout = open(os.devnull, "w")
-        sys.stderr = open(os.devnull, "w")
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        sys.stdout.close()
-        sys.stdout = self._original_stdout
-        sys.stderr = self._original_stderr
+        self.logger.log(
+            "warn", f"Context window OK: {num_tokens} < {C.CONTEXT_SIZE}"
+        ) if num_tokens < C.CONTEXT_SIZE else self.logger.log(
+            "error",
+            f"Context window not OK: {num_tokens} > {C.CONTEXT_SIZE}",
+        )
+        return num_tokens
