@@ -5,3 +5,4 @@ llama-cpp-python
 langchainhub
 chromadb
 gpt4all
+rank_bm25

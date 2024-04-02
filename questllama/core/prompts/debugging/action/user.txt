@@ -24,8 +24,11 @@ Inventory (0/36): Empty
 
 Chests: None
 
-Task: {task}
-
 Context: You can mine one of oak, birch, spruce, jungle, acacia, dark oak, or mangrove logs.
 
 Critique: None
+
+Task: {task}
+
+Focus intently on the specified task, ensuring that no additional actions or behaviors are introduced beyond what is explicitly requested. Aim to utilize 
+the most concise and minimal code possible to achieve the stated goal, avoiding any extraneous or unnecessary complexity.

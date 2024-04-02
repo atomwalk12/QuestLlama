@@ -22,3 +22,6 @@ DB_DIR = "./chroma_db"
 K = 4
 SEARCH_TYPE = "similarity"
 EMBEDDING = GPT4AllEmbeddings
+CHUNK_OVERLAP = 100
+CHUNK_SIZE = 800
+RETRIEVER='hybrid' # 'hybrid' or 'simple'

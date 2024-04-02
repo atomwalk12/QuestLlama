@@ -7,6 +7,8 @@ from langchain.schema import HumanMessage, SystemMessage
 
 
 if __name__ == "__main__":
+    os.environ["OPENAI_API_KEY"] = "sk-..."
+    
     # Prompt
     while True:
         task_type = 'action'
@@ -22,9 +24,7 @@ if __name__ == "__main__":
         user = U.debug_load_prompt(task_type + "/user.txt")
         user = user.format(task=task)
 
-        os.environ["OPENAI_API_KEY"] = "sk-..."
-        template = U.debug_load_prompt(task_type + "/system.txt")
-        user = U.debug_load_prompt(task_type + "/user.txt")
+        
         chat = QuestllamaClientProvider()
         msg = chat.generate(
             [
