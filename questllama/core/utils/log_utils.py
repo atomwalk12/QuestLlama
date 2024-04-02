@@ -82,9 +82,9 @@ class QuestLlamaLogger:
 class LoggerCallbackHandler(BaseCallbackHandler):
     """Callback handler for streaming. Only works with LLMs that support streaming."""
 
-    def __init__(self, **kwargs: Any) -> None:
+    def __init__(self, type='OllamaAPI', **kwargs: Any) -> None:
         super().__init__(**kwargs)
-        self.logger = QuestLlamaLogger("OllamaAPI")
+        self.logger = QuestLlamaLogger(type)
         self.tokenizer = Tokenizer.from_pretrained(C.TOKENIZER)
 
     def on_llm_start(

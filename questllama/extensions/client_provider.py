@@ -1,4 +1,3 @@
-from langchain.embeddings import GPT4AllEmbeddings
 from langchain.vectorstores import Chroma
 from langchain import PromptTemplate
 from langchain_text_splitters import (
@@ -96,7 +95,7 @@ class QuestllamaClientProvider(BaseChatProvider):
             language=Language.JS, chunk_size=60, chunk_overlap=0
         )
 
-        embedding_function = GPT4AllEmbeddings()
+        embedding_function = C.EMBEDDING()
         # Check if the persistence directory exists
         if os.path.exists(C.DB_DIR):
             # Load Chroma from the existing directory
@@ -122,20 +121,3 @@ class QuestllamaClientProvider(BaseChatProvider):
 
 QLCP = QuestllamaClientProvider
 
-
-if __name__ == "__main__":
-    import os
-    CURRENT = 'critic'
-
-    os.environ["OPENAI_API_KEY"] = "sk-..."
-    template = U.debug_load_prompt(CURRENT + "/system.txt")
-    user = U.debug_load_prompt(CURRENT + "/user.txt")
-    chat = QuestllamaClientProvider()
-    msg = chat.generate(
-        [
-            SystemMessage(content=template),
-            HumanMessage(content=user),
-        ],
-        CURRENT
-    )
-    print("Answer: ", msg.answer)
