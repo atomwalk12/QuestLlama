@@ -21,7 +21,7 @@ class QuestllamaClientProvider(BaseChatProvider):
             temperature=temperature,
             request_timeout=request_timeout,
         )
-        self.models = RetrievelSearchModels(skill_library='skill_library')
+        self.models = RetrievelSearchModels(skill_library="skill_library")
 
         self.client = self._get_client(model_name, temperature, request_timeout)
 
@@ -47,7 +47,8 @@ class QuestllamaClientProvider(BaseChatProvider):
         )
 
         self.result = qa_chain(
-            {"query": messages[1].content}, callbacks=[L.LoggerCallbackHandler()]
+            {"query": messages[1].content},
+            callbacks=[L.LoggerCallbackHandler(query_type=query_type)],
         )  # user prompt
 
         return QuestllamaMessage(self.result)

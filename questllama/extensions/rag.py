@@ -20,6 +20,7 @@ from langchain.retrievers import BM25Retriever, EnsembleRetriever
 CRITIC = "critic"
 ACTION = "action"
 SKILL = "skill"
+CURRICULUM = "curriculum"
 
 
 class RetrievelSearchModels:
@@ -35,9 +36,9 @@ class RetrievelSearchModels:
     def __init__(self, skill_library):
         self.logger = L.QuestLlamaLogger("OllamaAPI")
 
-        self.files = U.read_skill_library(skill_library)
+        self.action_files = U.read_skill_library(skill_library)
         self.logger.log(
-            "info", f"Skill Library. Read {len(self.files)} javascript files."
+            "info", f"Skill Library. Read {len(self.action_files)} javascript files."
         )
 
     def get_hybrid_search(self, vectorstore, splitter, weights):
@@ -52,7 +53,7 @@ class RetrievelSearchModels:
 
         # Parse the documents
         docs = self.get_documents(
-            self.files,
+            self.action_files,
             splitter=RecursiveCharacterTextSplitter.from_language(
                 chunk_size=C.CHUNK_SIZE,
                 chunk_overlap=C.CHUNK_OVERLAP,
@@ -118,7 +119,9 @@ class RetrievelSearchModels:
                 persist_directory=C.DB_DIR, embedding_function=embedding_function
             )
         else:
-            js_docs = js_splitter.create_documents([doc[1] for doc in self.files])
+            js_docs = js_splitter.create_documents(
+                [doc[1] for doc in self.action_files]
+            )
 
             # Load Chroma from documents and persist to disk if the directory does not exist
             vectorstore = Chroma.from_documents(
@@ -139,7 +142,9 @@ class RetrievelSearchModels:
         if self.retriever is None:
             if C.RETRIEVER == "hybrid":
                 if self._hybrid is None:
-                    self._hybrid = self.get_hybrid_search(vectorstore='chroma', splitter='recursive', weights=[0.5, 0.5])
+                    self._hybrid = self.get_hybrid_search(
+                        vectorstore="chroma", splitter="recursive", weights=[0.5, 0.5]
+                    )
 
                 self.retriever = HybridRetriever(
                     base_retriever=self._hybrid, query_type=query_type
@@ -175,7 +180,14 @@ class SimpleRetriever(BaseRetriever):
         :param query: String value of the query
 
         """
-        if self.query_type == CRITIC or self.query_type == SKILL:
+        # Critic tasks are preferably solvable by adding new examples in the critic.txt prompt.
+        # Skill tasks are generally simple to solve as they involve wring a definition of the function created during the action phase.
+        # Curriculum tasks could potentially use the crafted database to search for previous tasks which were performed at early stages during other runs.
+        if (
+            self.query_type == CRITIC
+            or self.query_type == SKILL
+            or self.query_type == CURRICULUM
+        ):
             return []
 
         if self.query_type == ACTION:

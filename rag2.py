@@ -4,14 +4,14 @@ import os
 from questllama.extensions.client_provider import QuestllamaClientProvider
 from langchain.schema import HumanMessage, SystemMessage
 
-
+task = ""
 
 if __name__ == "__main__":
     os.environ["OPENAI_API_KEY"] = "sk-..."
-    
+
     # Prompt
     while True:
-        task_type = 'critic'
+        task_type = "critic"
         # i.e. Mine 1 wood log
         task = input("\nQuery: ")
         if task == "exit":
@@ -22,15 +22,15 @@ if __name__ == "__main__":
         # Prompt
         template = U.debug_load_prompt(task_type + "/system.txt")
         user = U.debug_load_prompt(task_type + "/user.txt")
-        user = user.format(task=task)
+        if task_type == "action":
+            user = user.format(task=task)
 
-        
         chat = QuestllamaClientProvider()
         msg = chat.generate(
             [
                 SystemMessage(content=template),
                 HumanMessage(content=user),
             ],
-            task_type
+            task_type,
         )
         print("Answer: ", msg.answer)

@@ -1,21 +1,21 @@
-Biome:
+Biome: 
 
-Time: sunrise
+Time: day
 
-Nearby blocks: oak_leaves, oak_log, grass_block, dirt, grass, birch_leaves, birch_log
+Nearby blocks: grass_block, dirt, grass, oak_leaves, oak_log, stone, birch_log, lily_of_the_valley
 
 Health: 20.0/20
 
 Hunger: 20.0/20
 
-Position: x=61.5, y=75.0, z=29.3
+Position: x=-8.5, y=70.0, z=-5.3
 
-Equipment: [None, None, None, None, None, None]
+Equipment: [None, None, None, None, 'birch_log', None]
 
-Inventory (0/36): {{'oak_log':2, 'spruce_log':2}}
+Inventory (1/36): {'birch_log': 1}
 
 Chests: None
 
-Task: {task}
+Task: Mine 1 wood log
 
 Context: You can mine one of oak, birch, spruce, jungle, acacia, dark oak, or mangrove logs.

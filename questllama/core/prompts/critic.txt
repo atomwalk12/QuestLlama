@@ -31,6 +31,18 @@ Ensure the response can be parsed by Python `json.loads`, e.g.: no trailing comm
 
 Here are some examples:
 INPUT:
+Inventory (1/36): {{'spruce_log':1}}
+
+Task: Mine 1 wood log
+
+RESPONSE:
+{{
+    "reasoning": "The task was to mine 1 wood log. You've mined 1 spruce_log, which falls under the wood log category, fulfilling the task requirement.",
+    "success": true,
+    "critique": ""
+}}
+
+INPUT:
 Inventory (2/36): {{'oak_log':2, 'spruce_log':2}}
 
 Task: Mine 3 wood logs
@@ -131,7 +143,6 @@ RESPONSE
     "critique": "Deposit more useless items such as copper_block, diorite, granite, cobbled_deepslate, feather, and leather to meet the requirement of having only 20 occupied slots in your inventory."
 }}
 
-The information provided below is related to this task and may assist you in finding the solution.
 {context}
 
 Current state and objective: 

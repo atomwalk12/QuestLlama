@@ -11,6 +11,8 @@ from langchain_core.outputs import LLMResult
 from tokenizers import Tokenizer
 
 from questllama.core.utils import file_utils as U
+from questllama.extensions.rag import CRITIC, CURRICULUM, SKILL, ACTION
+
 import shared.config as C
 
 
@@ -78,13 +80,26 @@ class QuestLlamaLogger:
         else:
             raise Exception(f"Unknown log level {level}: {message}")
 
+    def log_phase(self, query_type, text):
+        if query_type == ACTION:
+            self.logger.warn("ACTION\n" + text)
+        elif query_type == CRITIC:
+            self.logger.warn("CRITIC\n" + text)
+        elif query_type == SKILL:
+            self.logger.info("SKILL\n" + text)
+        elif query_type == CURRICULUM:
+            self.logger.info("CURRICULUM\n" + text)
+        else:
+            raise Exception("Unknown query type.")
+
 
 class LoggerCallbackHandler(BaseCallbackHandler):
     """Callback handler for streaming. Only works with LLMs that support streaming."""
 
-    def __init__(self, type='OllamaAPI', **kwargs: Any) -> None:
+    def __init__(self, query_type, type="OllamaAPI", **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.logger = QuestLlamaLogger(type)
+        self.query_type = query_type
         self.tokenizer = Tokenizer.from_pretrained(C.TOKENIZER)
 
     def on_llm_start(
@@ -143,7 +158,7 @@ class LoggerCallbackHandler(BaseCallbackHandler):
 
     def on_text(self, text: str, **kwargs: Any) -> None:
         """Run on arbitrary text."""
-        self.logger.log("info", text)
+        self.logger.log_phase(self.query_type, text)
         num_tokens = self.log_token_count(text)
         assert num_tokens < C.CONTEXT_SIZE
 

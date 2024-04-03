@@ -40,3 +40,8 @@ Task: The next task.
 Here's an example response:
 Reasoning: The inventory is empty now, chop down a tree to get some wood.
 Task: Obtain a wood log.
+
+{context}
+
+Current state and objective: 
+{question}
