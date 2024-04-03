@@ -55,5 +55,13 @@
         //     "program": "voyager/env/mineflayer/index.js",
         //     "console": "integratedTerminal"
         // }
-    ]
+    ],
+    "compounds": [
+        {
+          "name": "Debug Mineflayer using Voyager",
+          "configurations": ["Python Debugger: Mineflayer", "Javascript Debugger: Voyager Experiments"],
+          //"preLaunchTask": "${defaultBuildTask}",
+          "stopAll": true
+        }
+      ]
 }

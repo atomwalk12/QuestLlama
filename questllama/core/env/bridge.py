@@ -13,7 +13,7 @@ def run():
         input("\n Start?")
         server = "http://127.0.0.1:3000"
         reset_options = {
-            "port": 45107,
+            "port": 43571,
             "reset": "hard",
             "inventory": {},
             "equipment": [],

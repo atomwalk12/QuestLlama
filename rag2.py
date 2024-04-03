@@ -11,7 +11,7 @@ if __name__ == "__main__":
     
     # Prompt
     while True:
-        task_type = 'action'
+        task_type = 'critic'
         # i.e. Mine 1 wood log
         task = input("\nQuery: ")
         if task == "exit":

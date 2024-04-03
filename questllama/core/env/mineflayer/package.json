@@ -4,8 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "debug_experiment": "node --nolazy index.js"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
     "author": "",
@@ -13,13 +12,12 @@
     "dependencies": {
         "body-parser": "^1.20.2",
         "express": "^4.18.2",
-        "graceful-fs": "^4.2.11",
         "magic-string": "^0.30.0",
         "minecraft-data": "^3.31.0",
-        "minecrafthawkeye": "=1.3.6",
+        "minecrafthawkeye": "^1.3.6",
         "mineflayer": "^4.8.1",
-        "mineflayer-collectblock": "file:mineflayer-collectblock",
         "mineflayer-pathfinder": "^2.4.2",
+        "mineflayer-collectblock": "^1.4.1",
         "mineflayer-pvp": "^1.3.2",
         "mineflayer-tool": "^1.2.0",
         "mocha": "^10.2.0",
@@ -31,7 +29,8 @@
         "prismarine-recipe": "^1.3.1",
         "prismarine-viewer": "^1.24.0",
         "typescript": "^4.9.5",
-        "vec3": "^0.1.8"
+        "vec3": "^0.1.8",
+        "graceful-fs": "^4.2.11"
     },
     "devDependencies": {
         "nodemon": "^3.1.0",

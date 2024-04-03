@@ -12,7 +12,7 @@ Position: x=61.5, y=75.0, z=29.3
 
 Equipment: [None, None, None, None, None, None]
 
-Inventory (0/36): Empty
+Inventory (0/36): {{'oak_log':2, 'spruce_log':2}}
 
 Chests: None
 
