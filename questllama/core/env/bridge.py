@@ -2,10 +2,10 @@ import requests
 from questllama.core.env import load_control_primitives
 import json
 
+
 def pretty_print(data):
     pretty_printed_string = json.dumps(json.loads(data), indent=4)
     print(pretty_printed_string)
-
 
 
 def run():
@@ -13,7 +13,7 @@ def run():
         input("\n Start?")
         server = "http://127.0.0.1:3000"
         reset_options = {
-            "port": 43571,
+            "port": 37573,
             "reset": "hard",
             "inventory": {},
             "equipment": [],
@@ -36,5 +36,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-
-

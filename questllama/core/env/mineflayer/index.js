@@ -9,13 +9,17 @@ const collectBlock = require('./mineflayer-collectblock').plugin
 
 bot = mineflayer.createBot({
     host: "localhost", // minecraft server ip
-    port: 43571, // minecraft server port
+    port: 46457, // minecraft server port
     username: "bot",
     disableChatSigning: true,
     checkTimeoutInterval: 60 * 60 * 1000,
 });
 
 bot.loadPlugin(collectBlock)
+
+bot.on('spawn', () => {
+  bot.chat('/gamemode survival @p')
+})
 
 // Listen for when a player says "collect [something]" in chat
 bot.on('chat', async (username, message) => {

@@ -22,7 +22,7 @@ export function findFromVein (bot: Bot, block: Block, maxBlocks: number, maxDist
           const neighbor = bot.blockAt(neighborPos)
           if (neighbor == null || neighbor.type !== type) continue
 
-          // FIXME Razvan three errors on neighbor below
+          // NOTE Questllama prismarine-block=1.16.3 gives error
           if (targets.includes(neighbor)) continue
           if (open.includes(neighbor)) continue
 

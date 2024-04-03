@@ -132,6 +132,7 @@ app.post("/start", (req, res) => {
         initCounter(bot);
         bot.chat("/gamerule keepInventory true");
         bot.chat("/gamerule doDaylightCycle false");
+        bot.chat("/gamemode survival @p")
     });
 
     function onConnectionFailed(e) {
@@ -165,7 +166,7 @@ app.post("/step", async (req, res) => {
 
     process.on("uncaughtException", otherError);
 
-    const mcData = require("minecraft-data")(bot.version); 
+    const mcData = require("minecraft-data")(bot.version);
     mcData.itemsByName["leather_cap"] = mcData.itemsByName["leather_helmet"];
     mcData.itemsByName["leather_tunic"] =
         mcData.itemsByName["leather_chestplate"];
@@ -396,11 +397,8 @@ app.post("/step", async (req, res) => {
         }
         return err.message;
     }
-    // FIXME: Razvan
-    console.log("Bot's Inventory:");
-    bot.inventory.items().forEach(item => {
-      console.log(`${item.name} x ${item.count}`);
-    });
+        // NOTE: print inventory
+        // sayItems()
 });
 
 app.post("/stop", (req, res) => {
@@ -428,3 +426,20 @@ const PORT = process.argv[2] || DEFAULT_PORT;
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });
+
+function sayItems (items = bot.inventory.items()) {
+    const output = items.map(itemToString).join(', ')
+    if (output) {
+        bot.chat(output)
+    } else {
+        bot.chat('empty')
+    }
+}
+
+function itemToString (item) {
+    if (item) {
+        return `${item.name} x ${item.count}`
+    } else {
+        return '(nothing)'
+    }
+}

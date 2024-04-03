@@ -206,7 +206,7 @@ async function mineBlock(
         }
     });
     try {
-        // FIXME Razvan Initial error here
+        // NOTE Questllama prismarine-block=1.16.3 gives error
         await bot.dig(block);
         // Waiting for items to drop
         await new Promise<void>((resolve) => {
