@@ -1,0 +1,210 @@
+[
+    [
+        "onChat",
+        {
+            "onChat": "Explore success.",
+            "voxels": [
+                "grass_block",
+                "dirt",
+                "birch_log",
+                "grass",
+                "birch_leaves"
+            ],
+            "status": {
+                "health": 20,
+                "food": 20,
+                "saturation": 5,
+                "position": {
+                    "x": 16.5,
+                    "y": 71,
+                    "z": -111.5
+                },
+                "velocity": {
+                    "x": 0,
+                    "y": -0.0784000015258789,
+                    "z": 0
+                },
+                "yaw": 3.141592653589793,
+                "pitch": 0,
+                "onGround": true,
+                "equipment": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "name": "bot",
+                "isInWater": false,
+                "isInLava": false,
+                "isCollidedHorizontally": false,
+                "isCollidedVertically": true,
+                "biome": "",
+                "entities": {},
+                "timeOfDay": "noon",
+                "inventoryUsed": 0,
+                "elapsedTime": 20
+            },
+            "inventory": {},
+            "nearbyChests": {},
+            "blockRecords": []
+        }
+    ],
+    [
+        "onChat",
+        {
+            "onChat": "Collect finish!",
+            "voxels": [
+                "grass_block",
+                "dirt",
+                "birch_log",
+                "grass",
+                "birch_leaves"
+            ],
+            "status": {
+                "health": 20,
+                "food": 20,
+                "saturation": 5,
+                "position": {
+                    "x": 16.5,
+                    "y": 71,
+                    "z": -111.5
+                },
+                "velocity": {
+                    "x": 0,
+                    "y": -0.0784000015258789,
+                    "z": 0
+                },
+                "yaw": -2.159844949342653,
+                "pitch": -0.3010692959690031,
+                "onGround": true,
+                "equipment": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "name": "bot",
+                "isInWater": false,
+                "isInLava": false,
+                "isCollidedHorizontally": false,
+                "isCollidedVertically": true,
+                "biome": "",
+                "entities": {},
+                "timeOfDay": "noon",
+                "inventoryUsed": 0,
+                "elapsedTime": 41
+            },
+            "inventory": {},
+            "nearbyChests": {},
+            "blockRecords": []
+        }
+    ],
+    [
+        "onSave",
+        {
+            "voxels": [
+                "grass_block",
+                "dirt",
+                "birch_log",
+                "grass",
+                "birch_leaves"
+            ],
+            "status": {
+                "health": 20,
+                "food": 20,
+                "saturation": 5,
+                "position": {
+                    "x": 16.5,
+                    "y": 71,
+                    "z": -111.5
+                },
+                "velocity": {
+                    "x": 0,
+                    "y": -0.0784000015258789,
+                    "z": 0
+                },
+                "yaw": -2.159844949342653,
+                "pitch": -0.3010692959690031,
+                "onGround": true,
+                "equipment": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "name": "bot",
+                "isInWater": false,
+                "isInLava": false,
+                "isCollidedHorizontally": false,
+                "isCollidedVertically": true,
+                "biome": "",
+                "entities": {},
+                "timeOfDay": "noon",
+                "inventoryUsed": 0,
+                "elapsedTime": 41
+            },
+            "inventory": {},
+            "onSave": "birch_log_mined",
+            "nearbyChests": {},
+            "blockRecords": []
+        }
+    ],
+    [
+        "observe",
+        {
+            "voxels": [
+                "grass_block",
+                "dirt",
+                "birch_log",
+                "grass",
+                "birch_leaves"
+            ],
+            "status": {
+                "health": 20,
+                "food": 20,
+                "saturation": 5,
+                "oxygen": 400,
+                "position": {
+                    "x": 16.5,
+                    "y": 71,
+                    "z": -111.5
+                },
+                "velocity": {
+                    "x": 0,
+                    "y": -0.0784000015258789,
+                    "z": 0
+                },
+                "yaw": -2.159844949342653,
+                "pitch": -0.3010692959690031,
+                "onGround": true,
+                "equipment": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "name": "bot",
+                "isInWater": false,
+                "isInLava": false,
+                "isCollidedHorizontally": false,
+                "isCollidedVertically": true,
+                "biome": "",
+                "entities": {},
+                "timeOfDay": "noon",
+                "inventoryUsed": 0,
+                "elapsedTime": 61
+            },
+            "inventory": {},
+            "nearbyChests": {},
+            "blockRecords": []
+        }
+    ]
+]

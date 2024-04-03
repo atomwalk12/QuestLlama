@@ -1,0 +1,59 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: RAG File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "rag2.py",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "name": "Python Debugger: questllama Learn",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "learn.py",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "name": "Python Debugger: Mineflayer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "questllama/core/env/bridge.py",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Javascript Debugger: Voyager Experiments",
+            "runtimeExecutable": "${workspaceFolder}/questllama/core/env/mineflayer/node_modules/nodemon/bin/nodemon.js",
+            "program": "voyager/env/mineflayer/index.js",
+            "restart": true,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Javascript Debugger: Questllama Experiments",
+            "runtimeExecutable": "${workspaceFolder}/questllama/core/env/mineflayer/node_modules/nodemon/bin/nodemon.js",
+            "program": "questllama/core/env/mineflayer/index.js",
+            "restart": true,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        }
+        // {
+        //     "name": "Javascript Debugger: Voyager Experiments",
+        //     "type": "node",
+        //     "request": "launch",
+        //     "program": "voyager/env/mineflayer/index.js",
+        //     "console": "integratedTerminal"
+        // }
+    ]
+}

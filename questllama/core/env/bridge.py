@@ -1,7 +1,11 @@
-from pandas import reset_option
 import requests
-import json
 from questllama.core.env import load_control_primitives
+import json
+
+def pretty_print(data):
+    pretty_printed_string = json.dumps(json.loads(data), indent=4)
+    print(pretty_printed_string)
+
 
 
 def run():
@@ -27,8 +31,10 @@ def run():
         requests.post(f"{server}/start", json=reset_options)
         print(data["code"])
         res = requests.post(f"{server}/step", json=data, timeout=request_timeout)
-        print(res)
+        pretty_print(res.text)
 
 
 if __name__ == "__main__":
     run()
+
+
