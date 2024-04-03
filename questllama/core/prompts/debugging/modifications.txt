@@ -1,7 +1,7 @@
 These are the modifications which were made to the new prompts:
 
 0. action_response_format.txt
-Use the following pieces of context to answer the question at the end. 
+The information provided below is related to this task and may assist you in finding the solution.
 {context}
 
 Current state and objective: 
@@ -13,14 +13,14 @@ Generate code strictly according to the given specifications. The code should be
 
 
 2. critic.txt
-Use the following pieces of context to answer the question at the end. 
+The information provided below is related to this task and may assist you in finding the solution.
 {context}
 
 Current state and objective: 
 {question}
 
 3. skill.txt
-Use the following pieces of context to answer the question at the end. 
+The information provided below is related to this task and may assist you in finding the solution.
 {context}
 
 Current state and objective: 
