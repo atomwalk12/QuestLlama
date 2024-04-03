@@ -7,39 +7,38 @@ bot = mineflayer.createBot({
     disableChatSigning: true,
     checkTimeoutInterval: 60 * 60 * 1000,
 });
-let mcData;
+let mcData
 
 // Load collect block
-bot.loadPlugin(require('mineflayer-collectblock').plugin);
+bot.loadPlugin(require('mineflayer-collectblock').plugin)
 
 async function collectGrass() {
-  // Find a nearby oak log
-  const oakLog = bot.findBlock({
-    matching: mcData.blocksByName.oak_log.id,
+  // Find a nearby grass block
+  const grass = bot.findBlock({
+    matching: mcData.blocksByName.grass_block.id,
     maxDistance: 64
-  });
+  })
 
-  if (oakLog) {
+  if (grass) {
     // If we found one, collect it.
     try {
-      await bot.collectBlock.collect(oakLog);
-      console.log('Collected an oak log. Current inventory:');
-      printInventory(); // Print the current inventory
-      collectGrass(); // Try to collect another oak log
+      await bot.collectBlock.collect(grass)
+      printInventory()
+      collectGrass() // Collect another grass block
     } catch (err) {
-      console.log(err); // Handle errors, if any
+      console.log(err) // Handle errors, if any
     }
   }
 }
 
 function printInventory() {
-  bot.inventory.items().forEach(item => {
-    console.log(`${item.name} x ${item.count}`);
-  });
-}
+    bot.inventory.items().forEach(item => {
+      console.log(`${item.name} x ${item.count}`);
+    });
+  }
 
-// On spawn, start collecting all nearby oak logs and print inventory
+// On spawn, start collecting all nearby grass
 bot.once('spawn', () => {
-  mcData = require('minecraft-data')(bot.version);
-  collectGrass();
-});
+  mcData = require('minecraft-data')(bot.version)
+  collectGrass()
+})
