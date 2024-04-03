@@ -4,10 +4,20 @@ const Vec3 = require('vec3')
 
 const bot = mineflayer.createBot({
   host: 'localhost',
-  port: 38281,
+  port: 45107,
   username: 'lookAt_Bot'
 })
-
+const { pathfinder } = require("mineflayer-pathfinder");
+const tool = require("mineflayer-tool").plugin;
+const collectBlock = require("mineflayer-collectblock").plugin;
+const pvp = require("mineflayer-pvp").plugin;
+const minecraftHawkEye = require("minecrafthawkeye");
+bot.loadPlugin(collectBlock); 
+bot.loadPlugin(pathfinder);
+bot.loadPlugin(tool);
+bot.loadPlugin(collectBlock);
+bot.loadPlugin(pvp);
+bot.loadPlugin(minecraftHawkEye);
 
 // mcData.itemsByName["leather_cap"] = mcData.itemsByName["leather_helmet"];
 // mcData.itemsByName["leather_tunic"] =
@@ -27,25 +37,14 @@ function lookAtNearestPlayer () {
   const pos = playerEntity.position.offset(0, playerEntity.height, 0)
   bot.lookAt(pos)
 }
-
+bot.once('spawn', main)
 
 function main() {
     mineWoodLog(bot)
 }
 
-bot.on('physicTick', main)
-bot.once('spawn', async () => {
-    const { pathfinder } = require("mineflayer-pathfinder");
-    const tool = require("mineflayer-tool").plugin;
-    const collectBlock = require("mineflayer-collectblock").plugin;
-    const pvp = require("mineflayer-pvp").plugin;
-    const minecraftHawkEye = require("minecrafthawkeye");
-    bot.loadPlugin(pathfinder);
-    bot.loadPlugin(tool);
-    bot.loadPlugin(collectBlock);
-    bot.loadPlugin(pvp);
-    bot.loadPlugin(minecraftHawkEye);
-})
+// bot.on('physicTick', main)
+ 
 
 iter = 1
 async function mineBlock(bot, name, count = 1) {
@@ -84,14 +83,14 @@ async function mineBlock(bot, name, count = 1) {
     await bot.collectBlock.collect(targets, {
         ignoreNoPath: true,
         count: count,
-    });
-    bot.save(`${name}_mined`);
+    }); 
+    // bot.save(`${name}_mined`);
 }
 
 
 async function mineWoodLog(bot) {
     
-    const woodLogNames = ["oak_log", "birch_log", "spruce_log", "jungle_log", "acacia_log", "dark_oak_log", "mangrove_log"];
+    const woodLogNames = ["oak_log", "birch_log", "spruce_log" , "jungle_log", "acacia_log", "dark_oak_log", "mangrove_log"];
   
     // Find a wood log block
     const woodLogBlock = await exploreUntil(bot, new Vec3(1, 0, 1), 60, () => {

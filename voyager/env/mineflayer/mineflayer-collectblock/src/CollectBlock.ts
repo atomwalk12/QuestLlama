@@ -206,6 +206,7 @@ async function mineBlock(
         }
     });
     try {
+        // FIXME Razvan Initial error here
         await bot.dig(block);
         // Waiting for items to drop
         await new Promise<void>((resolve) => {

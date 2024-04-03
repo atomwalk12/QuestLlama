@@ -22,6 +22,7 @@ export function findFromVein (bot: Bot, block: Block, maxBlocks: number, maxDist
           const neighbor = bot.blockAt(neighborPos)
           if (neighbor == null || neighbor.type !== type) continue
 
+          // FIXME Razvan three errors on neighbor below
           if (targets.includes(neighbor)) continue
           if (open.includes(neighbor)) continue
 

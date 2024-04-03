@@ -17,3 +17,7 @@ ollama cp deepseek-coder:33b-instruct-q5_K_M gpt-3.5-turbo
 * Add a custom message class which correctly gets the input from the model.
 * Modify old voyager to use prompts/voyager/
 * Replace { with {{ for questllama prompts
+
+
+# Known problems
+See https://github.com/MineDojo/Voyager/issues/120
