@@ -1,28 +1,20 @@
-from langchain_community.chat_models import ChatOpenAI
 from langchain import PromptTemplate
-from langchain_community.document_loaders import OnlinePDFLoader
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import GPT4AllEmbeddings
-from langchain import PromptTemplate
 from langchain_community.llms import Ollama
 from langchain.callbacks.manager import CallbackManager
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.chains import RetrievalQA
 from langchain_text_splitters import (
     Language,
     RecursiveCharacterTextSplitter,
 )
-from tokenizers import Tokenizer
 from langchain_core.vectorstores import BaseRetriever, VectorStoreRetriever
-from pydantic import BaseModel, Field
 # Hypothetical base class
 
 from langchain_core.callbacks.manager import (
-    AsyncCallbackManagerForRetrieverRun,
     CallbackManagerForRetrieverRun,
-    Callbacks,
 )
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import List
 
 from langchain_core.documents import Document
 import re
@@ -30,10 +22,8 @@ import re
 import questllama.core.utils as U
 import pkg_resources
 import os
-import sys
 from questllama.core.utils.log_utils import LoggerCallbackHandler
 import shared.config as C
-import questllama.core.utils.file_utils as U
 
 
 CRITIC = "critic"
@@ -135,7 +125,7 @@ if __name__ == "__main__":
         # Prompt
         template = rag.load_prompt(_TYPE + "/system.txt")
         user = rag.load_prompt(_TYPE + "/user.txt")
-        
+
         QA_CHAIN_PROMPT = PromptTemplate(
             input_variables=["context", "question"],
             template=template,

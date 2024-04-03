@@ -396,6 +396,11 @@ app.post("/step", async (req, res) => {
         }
         return err.message;
     }
+    // FIXME: Razvan
+    console.log("Bot's Inventory:");
+    bot.inventory.items().forEach(item => {
+      console.log(`${item.name} x ${item.count}`);
+    });
 });
 
 app.post("/stop", (req, res) => {
