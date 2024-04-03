@@ -1,5 +1,12 @@
-// Create your bot
-const mineflayer = require("mineflayer");
+/**
+ * This bot example show how to direct a bot to collect a specific block type
+ * or a group of nearby blocks of that type.
+ */
+
+const mineflayer = require('mineflayer')
+const collectBlock = require('./mineflayer-collectblock').plugin
+
+
 bot = mineflayer.createBot({
     host: "localhost", // minecraft server ip
     port: 43571, // minecraft server port
@@ -7,38 +14,56 @@ bot = mineflayer.createBot({
     disableChatSigning: true,
     checkTimeoutInterval: 60 * 60 * 1000,
 });
-let mcData
 
-// Load collect block
-bot.loadPlugin(require('mineflayer-collectblock').plugin)
+bot.loadPlugin(collectBlock)
 
-async function collectGrass() {
-  // Find a nearby grass block
-  const grass = bot.findBlock({
-    matching: mcData.blocksByName.grass_block.id,
-    maxDistance: 64
+// Listen for when a player says "collect [something]" in chat
+bot.on('chat', async (username, message) => {
+    const args = message.split(' ')
+    if (args[0] !== 'collect') return
+  
+    // Get the correct block type
+    const blockType = bot.registry.blocksByName[args[1]]
+    if (!blockType) {
+      bot.chat("I don't know any blocks with that name.")
+      return
+    }
+  
+    bot.chat('Collecting the nearest ' + blockType.name)
+  
+    // Try and find that block type in the world
+    const block = bot.findBlock({
+      matching: blockType.id,
+      maxDistance: 120
+    })
+  
+    if (!block) {
+      bot.chat("I don't see that block nearby.")
+      return
+    }
+  
+    // Collect the block if we found one
+    await bot.collectBlock.collect(block);
+    bot.chat('Done.')
+    bot.chat('My inventory is:')
+    sayItems()
   })
 
-  if (grass) {
-    // If we found one, collect it.
-    try {
-      await bot.collectBlock.collect(grass)
-      printInventory()
-      collectGrass() // Collect another grass block
-    } catch (err) {
-      console.log(err) // Handle errors, if any
-    }
-  }
+
+
+function sayItems (items = bot.inventory.items()) {
+const output = items.map(itemToString).join(', ')
+if (output) {
+    bot.chat(output)
+} else {
+    bot.chat('empty')
+}
 }
 
-function printInventory() {
-    bot.inventory.items().forEach(item => {
-      console.log(`${item.name} x ${item.count}`);
-    });
-  }
-
-// On spawn, start collecting all nearby grass
-bot.once('spawn', () => {
-  mcData = require('minecraft-data')(bot.version)
-  collectGrass()
-})
+function itemToString (item) {
+    if (item) {
+    return `${item.name} x ${item.count}`
+    } else {
+    return '(nothing)'
+    }
+}

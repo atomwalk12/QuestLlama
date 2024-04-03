@@ -4,15 +4,19 @@
  */
 
 const mineflayer = require('mineflayer')
-const collectBlock = require('./mineflayer-collectblock').plugin
+const collectBlock = require('mineflayer-collectblock').plugin
 
+if (process.argv.length < 4 || process.argv.length > 6) {
+  console.log('Usage : node collector.js <host> <port> [<name>] [<password>]')
+  process.exit(1)
+}
 
-bot = mineflayer.createBot({
-    host: "localhost", // minecraft server ip
-    port: 43571, // minecraft server port
-    username: "bot",
-    disableChatSigning: true,
-});
+const bot = mineflayer.createBot({
+  host: process.argv[2],
+  port: process.argv[3],
+  username: process.argv[4] || 'collector',
+  password: process.argv[5]
+})
 
 bot.loadPlugin(collectBlock)
 
