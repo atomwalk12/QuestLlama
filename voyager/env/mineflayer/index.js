@@ -97,7 +97,7 @@ app.post("/start", (req, res) => {
 
         const { pathfinder } = require("mineflayer-pathfinder");
         const tool = require("mineflayer-tool").plugin;
-        const collectBlock = require("mineflayer-collectblock").plugin;
+        const collectBlock = require("./mineflayer-collectblock").plugin;
         const pvp = require("mineflayer-pvp").plugin;
         const minecraftHawkEye = require("minecrafthawkeye");
         bot.loadPlugin(pathfinder);
@@ -165,7 +165,7 @@ app.post("/step", async (req, res) => {
 
     process.on("uncaughtException", otherError);
 
-    const mcData = require("minecraft-data")(bot.version);
+    const mcData = require("minecraft-data")(bot.version); 
     mcData.itemsByName["leather_cap"] = mcData.itemsByName["leather_helmet"];
     mcData.itemsByName["leather_tunic"] =
         mcData.itemsByName["leather_chestplate"];
