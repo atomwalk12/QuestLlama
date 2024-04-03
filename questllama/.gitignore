@@ -2,3 +2,4 @@ models/*
 test_scripts_temp
 ollama/models
 secret.py
+core/env/mineflayer/node_modules
