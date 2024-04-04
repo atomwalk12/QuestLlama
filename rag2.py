@@ -13,13 +13,12 @@ if __name__ == "__main__":
 
     # Prompt
     while True:
-        task_type = "action"
+        task_type = "curriculum_task_decomposition"
         # i.e. Mine 1 wood log
         task = input("\nQuery: ")
+        task_type = task_type if task == "" else task
         if task == "exit":
             break
-        if task.strip() == "":
-            continue
 
         # Prompt
         if task_type == "action":
@@ -34,7 +33,11 @@ if __name__ == "__main__":
         chat = QuestllamaClientProvider()
         msg = chat.generate(
             [
-                SystemMessage(content=template.content),
+                SystemMessage(
+                    content=template.template
+                    if isinstance(template, SystemMessage)
+                    else template
+                ),
                 HumanMessage(content=user),
             ],
             task_type,

@@ -1,0 +1,6 @@
+ACTION = "action"
+CRITIC = "critic"
+SKILL = "skill"
+CURRICULUM = "curriculum"
+CURRICULUM_QA_STEP2_ANSWER_QUESTIONS = "curriculum_qa_step2_answer_questions"
+CURRICULUM_TASK_DECOMPOSITION = "curriculum_task_decomposition"

@@ -381,7 +381,7 @@ class CurriculumAgent:
         print(
             f"\033[31m****Curriculum Agent task decomposition****\nFinal task: {task}\033[0m"
         )
-        response = self.llm.generate(messages).answer
+        response = self.llm.generate(messages, 'curriculum_task_decomposition').answer
         print(f"\033[31m****Curriculum Agent task decomposition****\n{response}\033[0m")
         return fix_and_parse_json(response)
 

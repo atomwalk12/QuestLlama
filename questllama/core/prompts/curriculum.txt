@@ -37,20 +37,17 @@ RESPONSE FORMAT:
 Reasoning: Based on the information I listed above, do reasoning about what the next task should be.
 Task: The next task.
 
-Here's an example response:
+Here's are some example responses:
 Reasoning: The inventory is empty now, chop down a tree to get some wood.
 Task: Obtain a wood log.
 
-Here are some specific examples:
-INPUT:
-Nearby blocks: stone, dirt, snow_block, snow, spruce_leaves, oak_log, spruce_log
-Inventory (1/36): {{'spruce_log':1}}
-
-RESPONSE:
 Reasoning: Your inventory contains just one spruce log, which means it's far from full, as you have 35 more slots available. This gives you plenty of room for more resources and exploration.
 Task: Mine 3 more oak logs.
 
+Reasoning: Since there is copper ore nearby and the player has already mined some copper ores, it would be beneficial to mine more copper ores to have a good supply for future crafting needs.
+Task: Mine 3 copper ores.
+
 {context}
 
-Current state and objective: 
+Current state:
 {question}

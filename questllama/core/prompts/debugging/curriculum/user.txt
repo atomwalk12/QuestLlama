@@ -1,10 +1,10 @@
-Nearby blocks: dirt, stone, grass_block, poppy, grass, oak_log, oak_leaves, birch_log, birch_leaves
+Nearby blocks: oak_leaves, oak_log, birch_leaves
 
-Position: x=118.5, y=67.0, z=98.3
+Position: x=48.5, y=76.0, z=-15.5
 
 Equipment: [None, None, None, None, 'oak_log', None]
 
-Inventory (1/36): {'oak_log': 1}
+Inventory (1/36): {{'oak_log': 1}}
 
 Chests: None
 

@@ -1,0 +1,13 @@
+Nearby blocks: birch_leaves, oak_leaves, oak_log, birch_log
+
+Position: x=368.5, y=67.0, z=352.5
+
+Equipment: [None, None, None, None, None, None]
+
+Inventory (0/36): Empty
+
+Completed tasks so far: None
+
+Failed tasks that are too hard: None
+
+Final task: Mine 1 oak log.

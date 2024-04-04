@@ -1,27 +1,2 @@
-These are the modifications which were made to the new prompts:
-
-0. action_response_format.txt
-The information provided below is related to this task and may assist you in finding the solution.
+Using the context provided by the following code, identify key concepts and insights that could guide the decomposition of a complex task into smaller, more manageable subtasks. Your main objective is to leverage the logic and patterns within the code to propose a structured approach for breaking down the overall task. This includes understanding the specific requirements implied by the code, the sequence of operations, and any dependencies that could influence the task's organization. Your analysis should culminate in a strategy for task decomposition that enhances planning and execution efficiency.
 {context}
-
-Current state and objective: 
-{question}
-
-1. action_template.txt
-
-Generate code strictly according to the given specifications. The code should be fully functional and ready to execute as provided, requiring no further modifications.
-
-
-2. critic.txt
-The information provided below is related to this task and may assist you in finding the solution.
-{context}
-
-Current state and objective: 
-{question}
-
-3. skill.txt
-The information provided below is related to this task and may assist you in finding the solution.
-{context}
-
-Current state and objective: 
-{question}

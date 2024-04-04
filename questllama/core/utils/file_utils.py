@@ -25,7 +25,7 @@ def load_prompt(file):
 def debug_load_prompt(prompt):
     """Load a prompt from a given file."""
     package_path = pkg_resources.resource_filename("questllama", "core")
-    return  load_text(f"{package_path}/prompts/{prompt}")
+    return load_text(f"{package_path}/prompts/{prompt}")
 
 
 def get_abs_path(resource_name):
@@ -66,6 +66,32 @@ def read_files(directory_path, extension=".js"):
                     all_files.append((file, f.read()))
 
     return all_files
+
+
+def smart_replace_braces(text):
+    # Temporary placeholders for "{context}" and "{question}"
+    placeholder_context = "PLACEHOLDER_CONTEXT"
+    placeholder_question = "PLACEHOLDER_QUESTION"
+    
+    # Replace "{context}" and "{question}" with placeholders
+    text = text.replace("{context}", placeholder_context).replace("{question}", placeholder_question)
+
+    # Replace existing "{{" and "}}" with placeholders
+    placeholder_open = "PLACEHOLDER_OPEN"
+    placeholder_close = "PLACEHOLDER_CLOSE"
+    text = text.replace("{{", placeholder_open).replace("}}", placeholder_close)
+
+    # Replace all single "{" and "}" with their double counterparts
+    text = text.replace("{", "{{").replace("}", "}}")
+
+    # Revert placeholders for "{{" and "}}" to their original state
+    text = text.replace(placeholder_open, "{{").replace(placeholder_close, "}}")
+
+    # Revert placeholders for "{context}" and "{question}" to their original strings
+    text = text.replace(placeholder_context, "{context}").replace(placeholder_question, "{question}")
+
+    return text
+
 
 
 # FIXME refactor these functions

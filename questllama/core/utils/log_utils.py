@@ -11,14 +11,9 @@ from langchain_core.outputs import LLMResult
 from tokenizers import Tokenizer
 
 from questllama.core.utils import file_utils as U
-from questllama.extensions.rag import (
-    CRITIC,
-    CURRICULUM,
-    CURRICULUM_QA_STEP2_ANSWER_QUESTIONS,
-    SKILL,
-    ACTION,
-)
 
+
+import questllama.extensions.tasks as tasks
 import shared.config as C
 
 
@@ -27,7 +22,7 @@ class QuestLlamaLogger:
     logger_initialized = False
     start_time = time.strftime("%Y%m%d_%H%M%S")  # Set the start time at the class level
 
-    def __init__(self, name: str):
+    def __init__(self, name="OllamaAPI"):
         """
         Initializes necessary components for logging and file handling, ensuring only one log file is created.
 
@@ -72,11 +67,14 @@ class QuestLlamaLogger:
         ansi_escape = re.compile(r"\x1B[@-_][0-?]*[ -/]*[@-~]")
         return ansi_escape.sub("", message)
 
-    def log(self, level, message):
+    def log(self, level, message, query_type="undefined"):
         """
         Write a message to the logger at a given level, after cleaning it of ANSI escape sequences.
         """
+        assert message is not None
+
         cleaned_message = self.clean_ansi_sequences(message)
+        cleaned_message = f"{query_type} - {cleaned_message}"
         if level == "error":
             self.logger.error(cleaned_message)
         elif level == "info":
@@ -84,19 +82,20 @@ class QuestLlamaLogger:
         elif level == "warn":
             self.logger.warning(cleaned_message)
         else:
-            raise Exception(f"Unknown log level {level}: {message}")
+            raise Exception(f"Unknown log level {level}: {cleaned_message}")
 
-    def log_phase(self, query_type, text):
-        if query_type == ACTION:
-            self.logger.warn("New phase: ACTION\n" + text)
-        elif query_type == CRITIC:
-            self.logger.warn("New phase: CRITIC\n" + text)
-        elif query_type == SKILL:
-            self.logger.info("New phase: SKILL\n" + text)
-        elif query_type == CURRICULUM:
-            self.logger.info("New phase: CURRICULUM\n" + text)
-        elif query_type == CURRICULUM_QA_STEP2_ANSWER_QUESTIONS:
-            self.logger.info("New phase: CURRICULUM_QA_STEP2_ANSWER_QUESTIONS\n")
+    def log_phase(self, query_type, text, level="warn"):
+        supported_tasks = [
+            tasks.ACTION,
+            tasks.CRITIC,
+            tasks.SKILL,
+            tasks.CURRICULUM,
+            tasks.CURRICULUM_QA_STEP2_ANSWER_QUESTIONS,
+            tasks.CURRICULUM_TASK_DECOMPOSITION,
+        ]
+
+        if query_type in supported_tasks:
+            self.log(level=level, message=text, query_type=query_type)
         else:
             raise Exception("Unknown query type.")
 
@@ -106,7 +105,7 @@ class LoggerCallbackHandler(BaseCallbackHandler):
 
     def __init__(self, query_type, type="OllamaAPI", **kwargs: Any) -> None:
         super().__init__(**kwargs)
-        self.logger = QuestLlamaLogger(type)
+        self.logger = QuestLlamaLogger(name=type)
         self.query_type = query_type
         self.tokenizer = Tokenizer.from_pretrained(C.TOKENIZER)
 
@@ -133,7 +132,8 @@ class LoggerCallbackHandler(BaseCallbackHandler):
 
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> None:
         """Run when LLM ends running."""
-        self.logger.write_to_file([response.generations[0][0]])
+        self.logger.log_phase(self.query_type, response.generations[0][0].type, "info")
+        self.logger.log_phase(self.query_type, response.generations[0][0].text)
 
     def on_llm_error(self, error: BaseException, **kwargs: Any) -> None:
         """Run when LLM errors."""
@@ -166,7 +166,7 @@ class LoggerCallbackHandler(BaseCallbackHandler):
 
     def on_text(self, text: str, **kwargs: Any) -> None:
         """Run on arbitrary text."""
-        self.logger.log_phase(self.query_type, text)
+        self.logger.log_phase(query_type=self.query_type, text=text)
         num_tokens = self.log_token_count(text)
         assert num_tokens < C.CONTEXT_SIZE
 
@@ -178,7 +178,7 @@ class LoggerCallbackHandler(BaseCallbackHandler):
         num_tokens = len(self.tokenizer.encode(text, add_special_tokens=True))
 
         self.logger.log(
-            "warn", f"Context window OK: {num_tokens} < {C.CONTEXT_SIZE}"
+            "info", f"Context window OK: {num_tokens} < {C.CONTEXT_SIZE}"
         ) if num_tokens < C.CONTEXT_SIZE else self.logger.log(
             "error",
             f"Context window not OK: {num_tokens} > {C.CONTEXT_SIZE}",

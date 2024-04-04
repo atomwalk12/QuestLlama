@@ -25,14 +25,13 @@ class QuestllamaClientProvider(BaseChatProvider):
 
         self.client = self._get_client(model_name, temperature, request_timeout)
 
-
     def generate(self, messages, query_type):
         """Generate messages using the LLM. As backend it defaults to Ollama."""
-        assert len(messages) <= 2
         assert isinstance(messages[0], SystemMessage)
-        assert isinstance(messages[1], HumanMessage)
 
         retriever = self.models.get_retriever(query_type=query_type)
+        messages[0].content = U.smart_replace_braces(messages[0].content)
+        messages[1].content = U.smart_replace_braces(messages[1].content)
 
         QA_CHAIN_PROMPT = PromptTemplate(
             input_variables=["context", "question"],
@@ -47,7 +46,7 @@ class QuestllamaClientProvider(BaseChatProvider):
         )
 
         self.result = qa_chain(
-            {"query": messages[1].content},
+            {"query": parse_human_messages(messages[1:])},
             callbacks=[L.LoggerCallbackHandler(query_type=query_type)],
         )  # user prompt
 
@@ -62,3 +61,10 @@ class QuestllamaClientProvider(BaseChatProvider):
         return Ollama(
             temperature=temperature, model=model_name, timeout=request_timeout
         )
+
+
+def parse_human_messages(messages: list[HumanMessage]):
+    for message in messages:
+        assert isinstance(message, HumanMessage)
+
+    return "\n".join([obj.content for obj in messages])

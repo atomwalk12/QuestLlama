@@ -4,24 +4,13 @@ from langchain_text_splitters import (
     RecursiveCharacterTextSplitter,
     TextSplitter,
 )
-from langchain_core.callbacks.manager import CallbackManagerForRetrieverRun
 import os
-from langchain_core.vectorstores import BaseRetriever, VectorStoreRetriever
-from typing import List
-import re
 
 import questllama.core.utils.file_utils as U
 import questllama.core.utils.log_utils as L
+from questllama.extensions.retrievers import HybridRetriever, SimpleRetriever
 from shared import config as C
-from langchain_core.documents import Document
 from langchain.retrievers import BM25Retriever, EnsembleRetriever
-
-
-ACTION = "action"
-CRITIC = "critic"
-SKILL = "skill"
-CURRICULUM = "curriculum"
-CURRICULUM_QA_STEP2_ANSWER_QUESTIONS = "curriculum_qa_step2_answer_questions"
 
 
 class RetrievelSearchModels:
@@ -39,7 +28,9 @@ class RetrievelSearchModels:
 
         self.action_files = U.read_skill_library(skill_library)
         self.logger.log(
-            "info", f"Skill Library. Read {len(self.action_files)} javascript files."
+            "info",
+            f"Skill Library. Read {len(self.action_files)} javascript files.",
+            "chromadb",
         )
 
     def get_hybrid_search(self, vectorstore, splitter, weights):
@@ -163,85 +154,3 @@ class RetrievelSearchModels:
 
     def raiser(ex):
         raise ex
-
-
-class SimpleRetriever(BaseRetriever):
-    base_retriever: VectorStoreRetriever = None
-    query_type: str
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _get_relevant_documents(
-        self, query: str, *, run_manager: CallbackManagerForRetrieverRun
-    ) -> List[Document]:
-        """
-        _get_relevant_documents is function of BaseRetriever implemented here
-
-        :param query: String value of the query
-
-        """
-        # Critic tasks are preferably solvable by adding new examples in the critic.txt prompt.
-        # Skill tasks are generally simple to solve as they involve wring a definition of the function created during the action phase.
-        # Curriculum tasks could potentially use the crafted database to search for previous tasks which were performed at early stages during other runs.
-        # CURRICULUM_QA_STEP2_ANSWER_QUESTIONS could potentially use the vector database as well to infer how to respond to questions given a task.
-        if (
-            self.query_type == CRITIC
-            or self.query_type == SKILL
-            or self.query_type == CURRICULUM
-            or self.query_type == CURRICULUM_QA_STEP2_ANSWER_QUESTIONS
-        ):
-            return []
-
-        if self.query_type == ACTION:
-            pattern = r"Task:.*\n"
-            match = re.search(pattern, query)
-            if match:
-                extracted_text = match.group()[6:]
-
-            assert len(extracted_text) > 2
-            # This method now calls the internal method that performs the actual retrieval
-            documents = self.base_retriever._get_relevant_documents(
-                query=extracted_text, run_manager=run_manager
-            )
-
-            return documents
-
-
-class HybridRetriever(BaseRetriever):
-    base_retriever: EnsembleRetriever = None
-    query_type: str
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _get_relevant_documents(
-        self, query: str, *, run_manager: CallbackManagerForRetrieverRun
-    ) -> List[Document]:
-        """
-        _get_relevant_documents is function of BaseRetriever implemented here
-
-        :param query: String value of the query
-
-        """
-        if (
-            self.query_type == CRITIC
-            or self.query_type == SKILL
-            or self.query_type == CURRICULUM
-            or self.query_type == CURRICULUM_QA_STEP2_ANSWER_QUESTIONS
-        ):
-            return []
-
-        if self.query_type == ACTION:
-            pattern = r"Task:.*\n"
-            match = re.search(pattern, query)
-            if match:
-                extracted_text = match.group()[6:]
-
-            assert len(extracted_text) > 2
-            # This method now calls the internal method that performs the actual retrieval
-            documents = self.base_retriever._get_relevant_documents(
-                query=extracted_text, run_manager=run_manager
-            )
-
-            return documents
