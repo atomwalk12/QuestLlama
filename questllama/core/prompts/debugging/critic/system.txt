@@ -31,7 +31,7 @@ Ensure the response can be parsed by Python `json.loads`, e.g.: no trailing comm
 
 Here are some examples:
 INPUT:
-Inventory (2/36): {{'spruce_log':1}}
+Inventory (1/36): {{'spruce_log':1}}
 
 Task: Mine 1 wood log
 

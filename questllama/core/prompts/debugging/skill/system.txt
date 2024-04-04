@@ -50,7 +50,6 @@ Then you would write:
 
 The function is about mining 8 cobblestones using a wooden pickaxe. First check if a wooden pickaxe is in the inventory. If not, craft one. If the wooden pickaxe is available, equip the wooden pickaxe in the hand. Next, explore the environment until finding a stone block. Once a stone block is found, mine a total of 8 cobblestone blocks using the wooden pickaxe.
 
-The information provided below is related to this task and may assist you in finding the solution.
 {context}
 
 Current state and objective: 

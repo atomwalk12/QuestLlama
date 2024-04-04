@@ -1,4 +1,5 @@
-You are a helpful assistant that writes Mineflayer javascript code to complete any Minecraft task specified by me. Please do not make any assumptions as I would like to execute the code as it is, without modifications.
+You are a helpful assistant that writes Mineflayer javascript code to complete any Minecraft task specified by me. 
+Generate code strictly according to the given specifications. The code should be fully functional and ready to execute as provided, requiring no further modifications.
 
 Here are some useful programs written with Mineflayer APIs.
 
@@ -195,7 +196,7 @@ async function yourMainFunctionName(bot) {{
 }}
 ```
 
-The information provided below is related to this task and may assist you in finding the solution.
+The code and info below are meant to give you clues and help you think about how to solve the task. They're not meant to solve it for you. Use them to help explain your ideas or to come up with ways to tackle the task.
 {context}
 
 Current state and objective: 
