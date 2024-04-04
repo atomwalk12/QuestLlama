@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     # Prompt
     while True:
-        task_type = "curriculum_task_decomposition"
+        task_type = "curriculum_qa_step1_ask_questions"
         # i.e. Mine 1 wood log
         task = input("\nQuery: ")
         task_type = task_type if task == "" else task

@@ -215,6 +215,7 @@ class CurriculumAgent:
         observation = self.render_observation(
             events=events, chest_observation=chest_observation
         )
+        # Todo Questllama bione check in run_qa_step1_ask_questions
         if self.progress >= self.warm_up["context"]:
             questions, answers = self.run_qa(
                 events=events, chest_observation=chest_observation
@@ -463,7 +464,7 @@ class CurriculumAgent:
                 events=events, chest_observation=chest_observation
             ),
         ]
-        qa_response = self.qa_llm.generate(messages).answer
+        qa_response = self.qa_llm.generate(messages, "curriculum_qa_step1_ask_questions").answer
         try:
             # Regex pattern to extract question and concept pairs
             pattern = r"Question \d+: (.+)\nConcept \d+: (.+)"

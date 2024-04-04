@@ -1,0 +1,13 @@
+Biome: 
+Time: noon
+Nearby blocks: oak_leaves, birch_leaves, birch_log, oak_log
+Other blocks that are recently seen: None
+Nearby entities: pig
+Health: 20.0/20
+Hunger: 20.0/20
+Position: x=352.5, y=67.0, z=352.5
+Equipment: [None, None, None, None, None, None]
+Inventory (0/36): Empty
+Chests: None
+Completed tasks so far: Mine 1 wood log
+Failed tasks that are too hard: Mine 3 more oak logs

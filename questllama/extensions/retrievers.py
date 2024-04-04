@@ -39,6 +39,7 @@ class QuestllamaBaseRetriever(BaseRetriever):
             tasks.CURRICULUM,
             tasks.CURRICULUM_QA_STEP2_ANSWER_QUESTIONS,
             tasks.CURRICULUM_TASK_DECOMPOSITION,
+            tasks.CURRICULUM_QA_STEP1_ASK_QUESTIONS
         ]
 
         if self.query_type in simple_tasks:
