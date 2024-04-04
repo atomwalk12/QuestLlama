@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     # Prompt
     while True:
-        task_type = "critic"
+        task_type = "curriculum_qa_step2_answer_questions"
         # i.e. Mine 1 wood log
         task = input("\nQuery: ")
         if task == "exit":
@@ -22,7 +22,7 @@ if __name__ == "__main__":
         # Prompt
         template = U.debug_load_prompt(task_type + "/system.txt")
         user = U.debug_load_prompt(task_type + "/user.txt")
-        if task_type == "action":
+        if task_type == "action" and user.find("{task}") != -1:
             user = user.format(task=task)
 
         chat = QuestllamaClientProvider()

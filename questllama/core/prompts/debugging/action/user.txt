@@ -28,7 +28,7 @@ Context: You can mine one of oak, birch, spruce, jungle, acacia, dark oak, or ma
 
 Critique: None
 
-Task: {task}
+Task: Mine 1 wood log.
 
 Focus intently on the specified task, ensuring that no additional actions or behaviors are introduced beyond what is explicitly requested. Aim to utilize 
 the most concise and minimal code possible to achieve the stated goal, avoiding any extraneous or unnecessary complexity.

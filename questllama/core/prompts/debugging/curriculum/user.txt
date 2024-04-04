@@ -1,0 +1,13 @@
+Nearby blocks: dirt, stone, grass_block, poppy, grass, oak_log, oak_leaves, birch_log, birch_leaves
+
+Position: x=118.5, y=67.0, z=98.3
+
+Equipment: [None, None, None, None, 'oak_log', None]
+
+Inventory (1/36): {'oak_log': 1}
+
+Chests: None
+
+Completed tasks so far: Mine 1 wood log
+
+Failed tasks that are too hard: None

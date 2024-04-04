@@ -11,7 +11,13 @@ from langchain_core.outputs import LLMResult
 from tokenizers import Tokenizer
 
 from questllama.core.utils import file_utils as U
-from questllama.extensions.rag import CRITIC, CURRICULUM, SKILL, ACTION
+from questllama.extensions.rag import (
+    CRITIC,
+    CURRICULUM,
+    CURRICULUM_QA_STEP2_ANSWER_QUESTIONS,
+    SKILL,
+    ACTION,
+)
 
 import shared.config as C
 
@@ -82,13 +88,15 @@ class QuestLlamaLogger:
 
     def log_phase(self, query_type, text):
         if query_type == ACTION:
-            self.logger.warn("ACTION\n" + text)
+            self.logger.warn("New phase: ACTION\n" + text)
         elif query_type == CRITIC:
-            self.logger.warn("CRITIC\n" + text)
+            self.logger.warn("New phase: CRITIC\n" + text)
         elif query_type == SKILL:
-            self.logger.info("SKILL\n" + text)
+            self.logger.info("New phase: SKILL\n" + text)
         elif query_type == CURRICULUM:
-            self.logger.info("CURRICULUM\n" + text)
+            self.logger.info("New phase: CURRICULUM\n" + text)
+        elif query_type == CURRICULUM_QA_STEP2_ANSWER_QUESTIONS:
+            self.logger.info("New phase: CURRICULUM_QA_STEP2_ANSWER_QUESTIONS\n")
         else:
             raise Exception("Unknown query type.")
 

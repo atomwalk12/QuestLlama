@@ -497,6 +497,6 @@ class CurriculumAgent:
             self.render_human_message_qa_step2_answer_questions(question=question),
         ]
         print(f"\033[35mCurriculum Agent Question: {question}\033[0m")
-        qa_answer = self.qa_llm.generate(messages).answer
+        qa_answer = self.qa_llm.generate(messages, 'curriculum_qa_step2_answer_questions').answer
         print(f"\033[31mCurriculum Agent {qa_answer}\033[0m")
         return qa_answer

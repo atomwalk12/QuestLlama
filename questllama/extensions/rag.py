@@ -17,10 +17,11 @@ from langchain_core.documents import Document
 from langchain.retrievers import BM25Retriever, EnsembleRetriever
 
 
-CRITIC = "critic"
 ACTION = "action"
+CRITIC = "critic"
 SKILL = "skill"
 CURRICULUM = "curriculum"
+CURRICULUM_QA_STEP2_ANSWER_QUESTIONS = "curriculum_qa_step2_answer_questions"
 
 
 class RetrievelSearchModels:
@@ -183,10 +184,12 @@ class SimpleRetriever(BaseRetriever):
         # Critic tasks are preferably solvable by adding new examples in the critic.txt prompt.
         # Skill tasks are generally simple to solve as they involve wring a definition of the function created during the action phase.
         # Curriculum tasks could potentially use the crafted database to search for previous tasks which were performed at early stages during other runs.
+        # CURRICULUM_QA_STEP2_ANSWER_QUESTIONS could potentially use the vector database as well to infer how to respond to questions given a task.
         if (
             self.query_type == CRITIC
             or self.query_type == SKILL
             or self.query_type == CURRICULUM
+            or self.query_type == CURRICULUM_QA_STEP2_ANSWER_QUESTIONS
         ):
             return []
 
@@ -221,7 +224,12 @@ class HybridRetriever(BaseRetriever):
         :param query: String value of the query
 
         """
-        if self.query_type == CRITIC or self.query_type == SKILL:
+        if (
+            self.query_type == CRITIC
+            or self.query_type == SKILL
+            or self.query_type == CURRICULUM
+            or self.query_type == CURRICULUM_QA_STEP2_ANSWER_QUESTIONS
+        ):
             return []
 
         if self.query_type == ACTION:
