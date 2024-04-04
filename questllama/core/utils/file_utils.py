@@ -25,7 +25,7 @@ def load_prompt(file):
 def debug_load_prompt(prompt):
     """Load a prompt from a given file."""
     package_path = pkg_resources.resource_filename("questllama", "core")
-    return  load_text(f"{package_path}/prompts/debugging/{prompt}")
+    return  load_text(f"{package_path}/prompts/{prompt}")
 
 
 def get_abs_path(resource_name):
