@@ -35,16 +35,16 @@ def get_abs_path(resource_name):
     return pkg_resources.resource_filename("questllama", resource_name)
 
 
-def read_skill_library(path):
+def read_skill_library(path, full_path=False):
     """
     Read all JavaScript files in the 'skill_library' directory and its subdirectories.
     """
     skill_directory = get_abs_path(path)
 
-    return read_files(skill_directory, extension=".js")
+    return read_files(skill_directory, extension=".js", full_path=full_path)
 
 
-def read_files(directory_path, extension=".js"):
+def read_files(directory_path, extension=".js", full_path=False):
     """
     Read all files in a directory and its subdirectories with the specified extension.
     """
@@ -57,13 +57,13 @@ def read_files(directory_path, extension=".js"):
 
         # If file is a directory, recursively read its contents
         if os.path.isdir(file_path):
-            all_files += read_files(file_path, extension)
+            all_files += read_files(file_path, extension, full_path=full_path)
 
         else:
             # If it's not a directory and has the correct extension, add to list of files to be returned
             if file.endswith(extension):
                 with open(file_path, "r") as f:
-                    all_files.append((file, f.read()))
+                    all_files.append((file if not full_path else file_path, f.read()))
 
     return all_files
 
@@ -72,9 +72,11 @@ def smart_replace_braces(text):
     # Temporary placeholders for "{context}" and "{question}"
     placeholder_context = "PLACEHOLDER_CONTEXT"
     placeholder_question = "PLACEHOLDER_QUESTION"
-    
+
     # Replace "{context}" and "{question}" with placeholders
-    text = text.replace("{context}", placeholder_context).replace("{question}", placeholder_question)
+    text = text.replace("{context}", placeholder_context).replace(
+        "{question}", placeholder_question
+    )
 
     # Replace existing "{{" and "}}" with placeholders
     placeholder_open = "PLACEHOLDER_OPEN"
@@ -88,10 +90,11 @@ def smart_replace_braces(text):
     text = text.replace(placeholder_open, "{{").replace(placeholder_close, "}}")
 
     # Revert placeholders for "{context}" and "{question}" to their original strings
-    text = text.replace(placeholder_context, "{context}").replace(placeholder_question, "{question}")
+    text = text.replace(placeholder_context, "{context}").replace(
+        placeholder_question, "{question}"
+    )
 
     return text
-
 
 
 # FIXME refactor these functions

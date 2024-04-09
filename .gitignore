@@ -133,3 +133,5 @@ run_questllama.py
 community
 .chroma
 chroma_db
+wiki
+db
