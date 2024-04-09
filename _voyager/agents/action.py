@@ -2,15 +2,15 @@ import re
 import time
 from typing import Type
 
-from voyager.extensions.chat_provider import VoyagerChatProvider
-import voyager.utils as U
+from _voyager.extensions.chat_provider import VoyagerChatProvider
+import _voyager.utils as U
 from javascript import require
 from langchain.prompts import SystemMessagePromptTemplate
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 from shared import BaseChatProvider
 
-from voyager.prompts import load_prompt
-from voyager.control_primitives_context import load_control_primitives_context
+from _voyager.prompts import load_prompt
+from _voyager.control_primitives_context import load_control_primitives_context
 
 
 class ActionAgent:

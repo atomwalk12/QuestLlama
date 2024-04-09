@@ -3,7 +3,7 @@ import re
 
 import minecraft_launcher_lib
 import sys
-import voyager.utils as U
+import _voyager.utils as U
 
 from .process_monitor import SubprocessMonitor
 

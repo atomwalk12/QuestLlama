@@ -5,10 +5,10 @@ import re
 from typing import Type
 
 from shared.client import BaseChatProvider
-from voyager.extensions.chat_provider import VoyagerChatProvider
-import voyager.utils as U
-from voyager.prompts import load_prompt
-from voyager.utils.json_utils import fix_and_parse_json
+from _voyager.extensions.chat_provider import VoyagerChatProvider
+import _voyager.utils as U
+from _voyager.prompts import load_prompt
+from _voyager.utils.json_utils import fix_and_parse_json
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import HumanMessage, SystemMessage
 from langchain.vectorstores import Chroma

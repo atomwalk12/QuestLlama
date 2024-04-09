@@ -4,7 +4,7 @@ import os
 from questllama.extensions.client_provider import QuestllamaClientProvider
 from langchain.schema import HumanMessage, SystemMessage
 
-from voyager.agents.action import ActionAgent
+from _voyager.agents.action import ActionAgent
 
 task = ""
 

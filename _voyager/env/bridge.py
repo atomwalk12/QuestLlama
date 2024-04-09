@@ -9,7 +9,7 @@ import json
 import gymnasium as gym
 from gymnasium.core import ObsType
 
-import voyager.utils as U
+import _voyager.utils as U
 
 from .minecraft_launcher import MinecraftInstance
 from .process_monitor import SubprocessMonitor

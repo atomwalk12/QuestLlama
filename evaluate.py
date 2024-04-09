@@ -1,8 +1,8 @@
 from shared import fetch_credentials
 from questllama.extensions.client_provider import QuestllamaClientProvider
 from shared.config import USE_QUESTLLAMA
-from voyager.extensions.chat_provider import VoyagerChatProvider
-from voyager import Voyager
+from _voyager.extensions.chat_provider import VoyagerChatProvider
+from _voyager import Voyager
 
 # Get login credentials and launch the experiment.
 azure_login, openai_api_key = fetch_credentials()

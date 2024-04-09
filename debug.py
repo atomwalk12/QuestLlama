@@ -1,5 +1,5 @@
 from questllama import QuestLlama
-from voyager import Voyager
+from _voyager import Voyager
 import os
 
 voyager = QuestLlama(

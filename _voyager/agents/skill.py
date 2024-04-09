@@ -1,8 +1,8 @@
 import os
 
 from shared.client import BaseChatProvider
-from voyager.extensions.chat_provider import VoyagerChatProvider
-import voyager.utils as U
+from _voyager.extensions.chat_provider import VoyagerChatProvider
+import _voyager.utils as U
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import HumanMessage, SystemMessage
 from langchain.vectorstores import Chroma
@@ -11,8 +11,8 @@ import shared.config as C
 
 
 
-from voyager.prompts import load_prompt
-from voyager.control_primitives import load_control_primitives
+from _voyager.prompts import load_prompt
+from _voyager.control_primitives import load_control_primitives
 
 
 class SkillManager:

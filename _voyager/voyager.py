@@ -5,8 +5,8 @@ import time
 from typing import Dict
 
 from shared.client import BaseChatProvider
-from voyager.extensions.chat_provider import VoyagerChatProvider
-import voyager.utils as U
+from _voyager.extensions.chat_provider import VoyagerChatProvider
+import _voyager.utils as U
 from .env import VoyagerEnv
 
 from .agents import ActionAgent

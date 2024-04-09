@@ -1,5 +1,5 @@
 import pkg_resources
-import voyager.utils as U
+import _voyager.utils as U
 import shared.config as C
 
 
