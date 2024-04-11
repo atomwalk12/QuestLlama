@@ -13,7 +13,7 @@ async function yourMainFunctionName(bot) {{
   // ...
 }}
 ```
-The code and info below are meant to give you clues and help you think about how to solve the task. They're not meant to solve it for you. Use them to help explain your ideas or to come up with ways to tackle the task.
+The code and information below are meant to give you clues and help you think about how to solve the task. They're not meant to solve it for you. Use them to help explain your ideas or to come up with ways to tackle the task.
 {context}
 
 Current state and objective: 

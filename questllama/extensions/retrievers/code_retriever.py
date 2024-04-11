@@ -34,10 +34,19 @@ class CodeRetriever(QuestllamaBaseRetriever):
     def _get_relevant_documents(
         self, query: str, *, run_manager: CallbackManagerForRetrieverRun
     ) -> List[Document]:
+        documents = super()._get_relevant_documents(
+            query=query, run_manager=run_manager
+        )
+        for doc in documents:
+            print(doc.page_content + "\n\n")
+        return documents
+
+    def get_documents(self, query, run_manager):
+        task = self.get_task(query)
+
         if self.reranker is None:
             self.reranker = RAGPretrainedModel.from_pretrained("colbert-ir/colbertv2.0")
 
-        task = self.get_task(query)
         relevant_docs = self.knowledge_index.similarity_search(
             query=task, k=self.TOP_K_GREEDY
         )
@@ -62,7 +71,6 @@ class CodeRetriever(QuestllamaBaseRetriever):
         langchain_docs = [Document(page_content=doc) for doc in relevant_docs]
 
         return langchain_docs
-        
 
 
 def get_base_retriever():
@@ -74,9 +82,7 @@ def get_base_retriever():
     ]
 
     # chunk size > 128 not supported by the embedding model
-    EMBEDDING_MODEL_NAME = (
-        "flax-sentence-embeddings/st-codesearch-distilroberta-base"
-    )
+    EMBEDDING_MODEL_NAME = "flax-sentence-embeddings/st-codesearch-distilroberta-base"
     CHUNK_SIZE = 128
 
     # split the files according to js separators
@@ -89,9 +95,7 @@ def get_base_retriever():
         model_name=EMBEDDING_MODEL_NAME,
         multi_process=True,
         model_kwargs={"device": "cuda"},
-        encode_kwargs={
-            "normalize_embeddings": True
-        },  # set True for cosine similarity
+        encode_kwargs={"normalize_embeddings": True},  # set True for cosine similarity
     )
 
     # Create and save/load the database
@@ -114,8 +118,6 @@ def get_base_retriever():
     return base_retriever, KNOWLEDGE_VECTOR_DATABASE
 
 
-
-
 def _split_documents(
     chunk_size: int,
     knowledge_base: List[LangchainDocument],
@@ -123,7 +125,7 @@ def _split_documents(
 ) -> List[LangchainDocument]:
     """
     Split documents into chunks of maximum size `chunk_size` tokens and return a list of documents.
-    """   
+    """
     JAVASCRIPT_SEPARATORS = [
         "\nfunction ",
         "\nconst ",

@@ -4,7 +4,7 @@ Position: x=48.5, y=76.0, z=-15.5
 
 Equipment: [None, None, None, None, 'oak_log', None]
 
-Inventory (1/36): {{'oak_log': 1}}
+Inventory (1/36): {'oak_log': 1}
 
 Chests: None
 

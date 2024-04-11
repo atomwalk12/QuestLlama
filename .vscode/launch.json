@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python Debugger: RAG File",
             "type": "debugpy",
             "request": "launch",
@@ -58,10 +65,13 @@
     ],
     "compounds": [
         {
-          "name": "Debug Mineflayer using Voyager",
-          "configurations": ["Python Debugger: Mineflayer", "Javascript Debugger: Voyager Experiments"],
-          //"preLaunchTask": "${defaultBuildTask}",
-          "stopAll": true
+            "name": "Debug Mineflayer using Voyager",
+            "configurations": [
+                "Python Debugger: Mineflayer",
+                "Javascript Debugger: Voyager Experiments"
+            ],
+            //"preLaunchTask": "${defaultBuildTask}",
+            "stopAll": true
         }
-      ]
+    ]
 }

@@ -21,7 +21,6 @@ class QuestllamaBaseRetriever(BaseRetriever):
         tasks.SKILL,
         tasks.CURRICULUM,
         tasks.CURRICULUM_QA_STEP2_ANSWER_QUESTIONS,
-        tasks.CURRICULUM_TASK_DECOMPOSITION,
         tasks.CURRICULUM_QA_STEP1_ASK_QUESTIONS,
     ]
     code_oriented_tasks = [tasks.ACTION, tasks.CURRICULUM_TASK_DECOMPOSITION]
@@ -48,14 +47,17 @@ class QuestllamaBaseRetriever(BaseRetriever):
             return []
 
         if self.query_type in self.code_oriented_tasks:
-            task = self.get_task(query)
+            return self.get_documents(query, run_manager)
 
-            # This method now calls the internal method that performs the actual retrieval
-            documents = self.base_retriever._get_relevant_documents(
-                query=task, run_manager=run_manager
-            )
+    def get_documents(self, query, run_manager):
+        task = self.get_task(query)
 
-            return documents
+        # This method now calls the internal method that performs the actual retrieval
+        documents = self.base_retriever._get_relevant_documents(
+            query=task, run_manager=run_manager
+        )
+
+        return documents
 
     def get_task(self, query):
         """
