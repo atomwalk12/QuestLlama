@@ -24,4 +24,4 @@ SEARCH_TYPE = "similarity"
 EMBEDDING = GPT4AllEmbeddings
 CHUNK_OVERLAP = 100
 CHUNK_SIZE = 800
-RETRIEVER='code' # 'hybrid' or 'simple'
+RETRIEVER = "unused"  # 'hybrid' or 'simple'

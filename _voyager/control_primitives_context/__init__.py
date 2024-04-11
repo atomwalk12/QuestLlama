@@ -8,7 +8,7 @@ def load_control_primitives_context(primitive_names=None):
     if C.USE_QUESTLLAMA:
         package_path = pkg_resources.resource_filename("questllama", "core")
     else:
-        package_path = pkg_resources.resource_filename("voyager", "")
+        package_path = pkg_resources.resource_filename("_voyager", "")
     if primitive_names is None:
         primitive_names = [
             primitive[:-3]

@@ -8,5 +8,5 @@ def load_prompt(prompt):
         package_path = pkg_resources.resource_filename("questllama", "core")
         return U.load_text(f"{package_path}/prompts/{prompt}.txt")
     else:
-        package_path = pkg_resources.resource_filename("voyager", "")
+        package_path = pkg_resources.resource_filename("_voyager", "")
         return U.load_text(f"{package_path}/prompts/{prompt}.txt")

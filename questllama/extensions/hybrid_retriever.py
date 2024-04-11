@@ -7,7 +7,6 @@ from typing import Optional, List
 
 import questllama.core.utils.file_utils as U
 import questllama.core.utils.log_utils as L
-from transformers import AutoTokenizer
 
 
 class HybridRetriever:

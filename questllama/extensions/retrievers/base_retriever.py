@@ -1,5 +1,5 @@
 from langchain_core.callbacks.manager import CallbackManagerForRetrieverRun
-from langchain_core.vectorstores import BaseRetriever, VectorStoreRetriever
+from langchain_core.vectorstores import BaseRetriever
 from typing import List
 import re
 
@@ -7,10 +7,7 @@ from langchain_core.documents import Document
 from langchain.retrievers import EnsembleRetriever
 
 import questllama.extensions.tasks as tasks
-from ragatouille import RAGPretrainedModel
-from langchain.vectorstores import FAISS
 
-import shared.config as Config
 
 
 class QuestllamaBaseRetriever(BaseRetriever):
