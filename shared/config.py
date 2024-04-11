@@ -1,4 +1,4 @@
-from langchain.embeddings import GPT4AllEmbeddings
+from langchain_community.embeddings import GPT4AllEmbeddings
 
 # Whether to enable the questllama experiment
 USE_QUESTLLAMA = True
@@ -18,10 +18,10 @@ TOKENIZER = "deepseek-ai/deepseek-coder-33b-instruct"
 
 # RAG skill library path
 SKILL_PATH = "skill_library"
-DB_DIR = "./chroma_db"
-K = 4
+DB_DIR = "./faiss_db"
+K = 5
 SEARCH_TYPE = "similarity"
 EMBEDDING = GPT4AllEmbeddings
 CHUNK_OVERLAP = 100
 CHUNK_SIZE = 800
-RETRIEVER='hybrid' # 'hybrid' or 'simple'
+RETRIEVER='code' # 'hybrid' or 'simple'

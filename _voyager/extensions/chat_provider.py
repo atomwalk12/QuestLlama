@@ -1,5 +1,5 @@
 from shared.client import BaseChatProvider
-from langchain_community.chat_models import ChatOpenAI
+from langchain_community.chat_models.openai import ChatOpenAI
 
 from shared.messages import VoyagerMessage
 

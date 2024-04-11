@@ -135,3 +135,5 @@ community
 chroma_db
 wiki
 db
+faiss_db
+llm

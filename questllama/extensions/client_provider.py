@@ -1,12 +1,12 @@
-from langchain import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
-from langchain.llms import Ollama
+from langchain_community.llms import Ollama
 from langchain.schema import HumanMessage, SystemMessage
 import questllama.core.utils.file_utils as U
 import questllama.core.utils.log_utils as L
+from questllama.extensions.retrievers import RetrieverFactory
 from shared import BaseChatProvider
 from shared.messages import QuestllamaMessage
-from questllama.extensions.rag import RetrievelSearchModels
 
 
 class QuestllamaClientProvider(BaseChatProvider):
@@ -21,18 +21,21 @@ class QuestllamaClientProvider(BaseChatProvider):
             temperature=temperature,
             request_timeout=request_timeout,
         )
-        self.models = RetrievelSearchModels(skill_library="skill_library")
+        # self.models = RetrievelSearchModels(skill_library="skill_library")
 
+        # Model is used for reranking during answer_with_rag
         self.client = self._get_client(model_name, temperature, request_timeout)
 
     def generate(self, messages, query_type):
         """Generate messages using the LLM. As backend it defaults to Ollama."""
         assert isinstance(messages[0], SystemMessage)
 
-        retriever = self.models.get_retriever(query_type=query_type)
+        retriever = RetrieverFactory.create_retriever("code_search", query_type)
+        # retriever = self.models.get_retriever(query_type=query_type)
         messages[0].content = U.smart_replace_braces(messages[0].content)
         messages[1].content = U.smart_replace_braces(messages[1].content)
 
+        # The context contains the fetched js functions
         QA_CHAIN_PROMPT = PromptTemplate(
             input_variables=["context", "question"],
             template=messages[0].content,  # system prompt
@@ -45,8 +48,9 @@ class QuestllamaClientProvider(BaseChatProvider):
             return_source_documents=True,
         )
 
+        # the query is the question defined above
         self.result = qa_chain(
-            {"query": parse_human_messages(messages[1:])},
+            {"query": concatenate_human_messages(messages[1:])},
             callbacks=[L.LoggerCallbackHandler(query_type=query_type)],
         )  # user prompt
 
@@ -63,7 +67,7 @@ class QuestllamaClientProvider(BaseChatProvider):
         )
 
 
-def parse_human_messages(messages: list[HumanMessage]):
+def concatenate_human_messages(messages: list[HumanMessage]):
     for message in messages:
         assert isinstance(message, HumanMessage)
 

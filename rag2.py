@@ -1,7 +1,7 @@
 # Hypothetical base class
 import questllama.core.utils.file_utils as U
 import os
-from questllama.extensions.client_provider import QuestllamaClientProvider
+from questllama.extensions import QuestllamaClientProvider
 from langchain.schema import HumanMessage, SystemMessage
 
 from _voyager.agents.action import ActionAgent
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         msg = chat.generate(
             [
                 SystemMessage(
-                    content=template.template
+                    content=template.content
                     if isinstance(template, SystemMessage)
                     else template
                 ),

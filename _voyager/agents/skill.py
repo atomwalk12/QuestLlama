@@ -5,7 +5,7 @@ from _voyager.extensions.chat_provider import VoyagerChatProvider
 import _voyager.utils as U
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import HumanMessage, SystemMessage
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from typing import Type
 import shared.config as C
 

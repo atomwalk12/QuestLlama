@@ -7,13 +7,10 @@ from langchain_core.documents import Document
 from langchain.retrievers import EnsembleRetriever
 
 import questllama.extensions.tasks as tasks
+from ragatouille import RAGPretrainedModel
+from langchain.vectorstores import FAISS
 
-
-# Critic tasks are preferably solvable by adding new examples in the critic.txt prompt.
-# Skill tasks are generally simple to solve as they involve wring a definition of the function created during the action phase.
-# Curriculum tasks could potentially use the crafted database to search for previous tasks which were performed at early stages during other runs.
-# CURRICULUM_QA_STEP2_ANSWER_QUESTIONS could potentially use the vector database as well to infer how to respond to questions given a task.
-# CURRICULUM_TASK_DECOMPOSTION makes use of code reitrieval to answer the question.
+import shared.config as Config
 
 
 class QuestllamaBaseRetriever(BaseRetriever):
@@ -42,6 +39,11 @@ class QuestllamaBaseRetriever(BaseRetriever):
         be solved without code context, and more complex ones that require document retrieval.
         """
 
+        # Critic tasks are preferably solvable by adding new examples in the critic.txt prompt.
+        # Skill tasks are generally simple to solve as they involve wring a definition of the function created during the action phase.
+        # Curriculum tasks could potentially use the crafted database to search for previous tasks which were performed at early stages during other runs.
+        # CURRICULUM_QA_STEP2_ANSWER_QUESTIONS could potentially use the vector database as well to infer how to respond to questions given a task.
+        # CURRICULUM_TASK_DECOMPOSTION makes use of code reitrieval to answer the question.
         if self.query_type in self.simple_tasks:
             return []
 
@@ -64,42 +66,10 @@ class QuestllamaBaseRetriever(BaseRetriever):
         match = re.search(pattern, query)
         if match:
             extracted_text = (
-                match.group()[6:] if query == tasks.ACTION else match.group()[12:]
+                match.group()[6:]
+                if self.query_type == tasks.ACTION
+                else match.group()[12:]
             )
 
         assert len(extracted_text) > 2
         return extracted_text
-
-
-class SimpleRetriever(BaseRetriever):
-    base_retriever: VectorStoreRetriever = None
-    query_type: str
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _get_relevant_documents(
-        self, query: str, *, run_manager: CallbackManagerForRetrieverRun
-    ) -> List[Document]:
-        documents = super()._get_relevant_documents(
-            query=query, run_manager=run_manager
-        )
-        return documents
-
-
-class HybridRetriever(QuestllamaBaseRetriever):
-    base_retriever: EnsembleRetriever = None
-    query_type: str
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _get_relevant_documents(
-        self, query: str, *, run_manager: CallbackManagerForRetrieverRun
-    ) -> List[Document]:
-        documents = super()._get_relevant_documents(
-            query=query, run_manager=run_manager
-        )
-        for doc in documents:
-            print(doc.page_content + "\n\n")
-        return documents

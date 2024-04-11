@@ -1,4 +1,4 @@
-from langchain import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import GPT4AllEmbeddings
 from langchain_community.llms import Ollama
