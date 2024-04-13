@@ -136,6 +136,8 @@ chroma_db
 wiki
 db
 faiss_db
+
+# Evaluation files
 llm
 data
 output

@@ -136,6 +136,11 @@ def correct_json(json_str: str) -> str:
                 return json_str
             except json.JSONDecodeError as e:
                 error_message = str(e)
+
+        if error_message.startswith("Expecting value: line 1 column 1"):
+            match = re.search(r"\[\s*(.*?)\s*\]", json_str, re.DOTALL)
+            return match.group()
+
         if balanced_str := balance_braces(json_str):
             return balanced_str
     return json_str

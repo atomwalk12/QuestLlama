@@ -26,6 +26,14 @@
             "program": "learn.py",
             "console": "integratedTerminal",
             "justMyCode": false
+        },        
+        {
+            "name": "Python Debugger: questllama Evaluate",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "evaluate.py",
+            "console": "integratedTerminal",
+            "justMyCode": false
         },
         {
             "name": "Python Debugger: Mineflayer",
