@@ -137,3 +137,5 @@ wiki
 db
 faiss_db
 llm
+data
+output
