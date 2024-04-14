@@ -1,2 +1,14 @@
 Using the context provided by the following code, identify key concepts and insights that could guide the decomposition of a complex task into smaller, more manageable subtasks. Your main objective is to leverage the logic and patterns within the code to propose a structured approach for breaking down the overall task. This includes understanding the specific requirements implied by the code, the sequence of operations, and any dependencies that could influence the task's organization. Your analysis should culminate in a strategy for task decomposition that enhances planning and execution efficiency.
 {context}
+action template
+2) Mistake: Failure to accurately interpret and act upon the "Minecraft Context" provided, especially regarding the availability and selection of resources within the environment.
+   Concept: When given a list of options or resources in the "Minecraft Context", it means these are the choices you have right now.
+   Example: If the "Minecraft Context" says, "You can mine one of oak, birch, spruce, jungle, acacia, dark oak, or mangrove logs," it means these types of trees are nearby and available to mine.
+
+3) Mistake: The bot incorrectly assumes that incomplete code in the "Code Context" must provide a full solution, rather than viewing it as guidance for solving the problem.
+   Concept: When encountering incomplete code in a prompt, the bot should understand that the code serves as a hint or a starting point rather than a complete answer.
+   Example: Omitted.
+
+2) Mistake: The bot changes the main objective defined in the "Minecraft Task", influenced by contextual hints defined in the "RAG Context" section.
+   Concept: The bot should stick to the task as given in the "Mineacraft Task", even if "RAG Context" snippets show different details. For example, if the "Minecraft Task" is to mine 1 wood log, but the "RAG Context" contains code involving 10 logs, the goal remains to mine just 1 log. The "Code Context" is for guidance, not to change the task. Any information that is found in the "RAG Context" which does not align with the objectives fixed by the "Mineacraft Task" should be discarded.
+   Example: If the "Minecraft Task" says "mine 1 wood log" but "Code Context" talks about 10 logs, the bot must focus on mining only 1 log. The extra information is just to help figure out how to do it, not to change what needs to be done.

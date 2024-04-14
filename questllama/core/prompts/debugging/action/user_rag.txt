@@ -1,3 +1,6 @@
+---
+Task Communication:
+
 Code from the last round: No code in the first round
 
 Execution error: No error
@@ -24,9 +27,8 @@ Inventory (0/36): Empty
 
 Chests: None
 
-Task: Mine 1 wood log
+Task: {question}
 
 Context: You can mine one of oak, birch, spruce, jungle, acacia, dark oak, or mangrove logs.
 
 Critique: None
-
