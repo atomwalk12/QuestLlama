@@ -1,5 +1,5 @@
 import shared.config as Config
-from questllama.extensions.client_provider import QuestllamaClientProvider
+from questllama.extensions.chat_interaction_provider import QuestllamaClientProvider
 from _voyager.extensions.chat_provider import VoyagerChatProvider
 
 

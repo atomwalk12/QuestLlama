@@ -1,13 +1,15 @@
+import re
 from langchain_core.callbacks.manager import CallbackManagerForRetrieverRun
 from langchain_core.vectorstores import BaseRetriever
 from typing import List
-import re
-
 from langchain_core.documents import Document
 from langchain.retrievers import EnsembleRetriever
-
-import questllama.extensions.tasks as tasks
-
+import questllama.core.constants as tasks
+from langchain.docstore.document import Document as LangchainDocument
+from array import array
+from typing import Optional
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from transformers import AutoTokenizer
 
 
 class QuestllamaBaseRetriever(BaseRetriever):
@@ -72,3 +74,40 @@ class QuestllamaBaseRetriever(BaseRetriever):
 
         assert len(extracted_text) > 2
         return extracted_text
+
+    @staticmethod
+    def _split_documents(
+        chunk_size: int,
+        separators: array,
+        knowledge_base: List[LangchainDocument],
+        tokenizer_name: Optional[str],
+    ) -> List[LangchainDocument]:
+        """
+        Split documents into chunks of maximum size `chunk_size` tokens and return a list of documents.
+        """
+
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+
+        print(f"Debug: given separators{separators}")
+        text_splitter = RecursiveCharacterTextSplitter.from_huggingface_tokenizer(
+            tokenizer,
+            chunk_size=chunk_size,
+            chunk_overlap=int(chunk_size / 10),
+            add_start_index=True,
+            strip_whitespace=True,
+            separators=separators,
+        )
+
+        docs_processed = []
+        for doc in knowledge_base:
+            docs_processed += text_splitter.split_documents([doc])
+
+        # Remove duplicates
+        unique_texts = {}
+        docs_processed_unique = []
+        for doc in docs_processed:
+            if doc.page_content not in unique_texts:
+                unique_texts[doc.page_content] = True
+                docs_processed_unique.append(doc)
+
+        return docs_processed_unique

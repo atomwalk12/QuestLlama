@@ -2,9 +2,9 @@ from langchain_core.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain_community.llms import Ollama
 from langchain.schema import HumanMessage, SystemMessage
-import questllama.core.utils.file_utils as U
-import questllama.core.utils.log_utils as L
-from questllama.extensions.retrievers import RetrieverFactory
+import shared.file_utils as U
+import questllama.core.utils.logger as L
+from questllama.core.retrievers import RetrieverFactory
 from shared import BaseChatProvider
 from shared.messages import QuestllamaMessage
 
@@ -29,6 +29,8 @@ class QuestllamaClientProvider(BaseChatProvider):
     def generate(self, messages, query_type):
         """Generate messages using the LLM. As backend it defaults to Ollama."""
         assert isinstance(messages[0], SystemMessage)
+        for message in messages[1:]:
+            assert isinstance(message, HumanMessage)
 
         retriever = RetrieverFactory.create_retriever("code_search", query_type)
         # retriever = self.models.get_retriever(query_type=query_type)
@@ -50,7 +52,7 @@ class QuestllamaClientProvider(BaseChatProvider):
 
         # the query is the question defined above
         self.result = qa_chain(
-            {"query": concatenate_human_messages(messages[1:])},
+            {"query": "\n".join([obj.content for obj in messages])},
             callbacks=[L.LoggerCallbackHandler(query_type=query_type)],
         )  # user prompt
 
@@ -65,10 +67,3 @@ class QuestllamaClientProvider(BaseChatProvider):
         return Ollama(
             temperature=temperature, model=model_name, timeout=request_timeout
         )
-
-
-def concatenate_human_messages(messages: list[HumanMessage]):
-    for message in messages:
-        assert isinstance(message, HumanMessage)
-
-    return "\n".join([obj.content for obj in messages])

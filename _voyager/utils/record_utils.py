@@ -1,6 +1,6 @@
 import time
 
-from .file_utils import *
+from shared.file_utils import *
 from .json_utils import *
 
 

@@ -1,5 +1,5 @@
 from shared import fetch_credentials
-from questllama.extensions.client_provider import QuestllamaClientProvider
+from questllama.extensions.chat_interaction_provider import QuestllamaClientProvider
 from shared.config import USE_QUESTLLAMA
 from _voyager.extensions.chat_provider import VoyagerChatProvider
 from _voyager import Voyager

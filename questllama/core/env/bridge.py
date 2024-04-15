@@ -3,11 +3,6 @@ from questllama.core.env import load_control_primitives
 import json
 
 
-def pretty_print(data):
-    pretty_printed_string = json.dumps(json.loads(data), indent=4)
-    print(pretty_printed_string)
-
-
 def run():
     while True:
         input("\n Start?")
@@ -31,7 +26,8 @@ def run():
         requests.post(f"{server}/start", json=reset_options)
         print(data["code"])
         res = requests.post(f"{server}/step", json=data, timeout=request_timeout)
-        pretty_print(res.text)
+        pretty_printed_string = json.dumps(json.loads(res.text), indent=4)
+        print(pretty_printed_string)
 
 
 if __name__ == "__main__":

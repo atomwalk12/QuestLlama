@@ -6,9 +6,10 @@ from langchain_text_splitters import (
 )
 import os
 
-import questllama.core.utils.file_utils as U
-import questllama.core.utils.log_utils as L
-from questllama.extensions.retrievers import HybridRetriever, SimpleRetriever
+import shared.file_utils as U
+import questllama.core.utils.logger as L
+from questllama.core.retrievers import HybridRetriever
+from questllama.core.retrievers import SimpleRetriever
 from shared import config as C
 from langchain.retrievers import BM25Retriever, EnsembleRetriever
 

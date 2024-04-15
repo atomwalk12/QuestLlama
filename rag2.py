@@ -1,5 +1,5 @@
 # Hypothetical base class
-import questllama.core.utils.file_utils as U
+import shared.file_utils as U
 import os
 from questllama.extensions import QuestllamaClientProvider
 from langchain.schema import HumanMessage, SystemMessage

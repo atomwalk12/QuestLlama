@@ -1,7 +1,7 @@
 import json
 import re
 from typing import Any, Dict, Union
-from .file_utils import f_join
+from shared.file_utils import f_join
 
 
 def json_load(*file_path, **kwargs):

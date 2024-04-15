@@ -19,10 +19,10 @@ from typing import List
 from langchain_core.documents import Document
 import re
 
-import questllama.core.utils as U
+import shared.file_utils as U
 import pkg_resources
 import os
-from questllama.core.utils.log_utils import LoggerCallbackHandler
+from questllama.core.utils import LoggerCallbackHandler
 import shared.config as C
 
 

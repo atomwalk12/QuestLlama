@@ -1,7 +1,7 @@
 import os
 import pkg_resources
 
-from questllama.core.utils.file_utils import load_text
+from shared.file_utils import load_text
 
 
 def load_control_primitives(file):

@@ -18,7 +18,7 @@ import tempfile
 from datetime import datetime
 from socket import gethostname
 import logging
-
+import pkg_resources
 
 f_ext = os.path.splitext
 
@@ -566,3 +566,100 @@ read_text_lines = load_text_lines
 write_text = dump_text
 write_text_lines = dump_text_lines
 text_dump = dump_text
+
+
+
+
+def load_text(path, by_lines=False):
+    """
+    Load text from a file at the given path. The function can either read the entire
+    content of the file or break it down into lines depending on the 'by_lines' parameter.
+    """
+
+    with open(path, "r") as fp:
+        if by_lines:
+            return fp.readlines()
+        else:
+            return fp.read()
+
+
+def load_prompt(file):
+    """Load a prompt from a given file."""
+    package_path = pkg_resources.resource_filename("questllama", "core")
+    return load_text(f"{package_path}/prompts/{file}.txt")
+
+
+def debug_load_prompt(prompt):
+    """Load a prompt from a given file."""
+    package_path = pkg_resources.resource_filename("questllama", "core")
+    return load_text(f"{package_path}/prompts/{prompt}")
+
+
+def get_abs_path(resource_name):
+    """
+    Get the absolute path of a resource file based on its name.
+    """
+    return pkg_resources.resource_filename("questllama", resource_name)
+
+
+def read_skill_library(path, full_path=False):
+    """
+    Read all JavaScript files in the 'skill_library' directory and its subdirectories.
+    """
+    skill_directory = get_abs_path(path)
+
+    return read_files(skill_directory, extension=".js", full_path=full_path)
+
+
+def read_files(directory_path, extension=".js", full_path=False):
+    """
+    Read all files in a directory and its subdirectories with the specified extension.
+    """
+
+    all_files = []
+
+    for file in os.listdir(directory_path):
+        # Construct absolute path of current file/directory being examined
+        file_path = os.path.join(directory_path, file)
+
+        # If file is a directory, recursively read its contents
+        if os.path.isdir(file_path):
+            all_files += read_files(file_path, extension, full_path=full_path)
+
+        else:
+            # If it's not a directory and has the correct extension, add to list of files to be returned
+            if file.endswith(extension):
+                with open(file_path, "r") as f:
+                    all_files.append((file if not full_path else file_path, f.read()))
+
+    return all_files
+
+
+def smart_replace_braces(text):
+    # Temporary placeholders for "{context}" and "{question}"
+    placeholder_context = "PLACEHOLDER_CONTEXT"
+    placeholder_question = "PLACEHOLDER_QUESTION"
+
+    # Replace "{context}" and "{question}" with placeholders
+    text = text.replace("{context}", placeholder_context).replace(
+        "{question}", placeholder_question
+    )
+
+    # Replace existing "{{" and "}}" with placeholders
+    placeholder_open = "PLACEHOLDER_OPEN"
+    placeholder_close = "PLACEHOLDER_CLOSE"
+    text = text.replace("{{", placeholder_open).replace("}}", placeholder_close)
+
+    # Replace all single "{" and "}" with their double counterparts
+    text = text.replace("{", "{{").replace("}", "}}")
+
+    # Revert placeholders for "{{" and "}}" to their original state
+    text = text.replace(placeholder_open, "{{").replace(placeholder_close, "}}")
+
+    # Revert placeholders for "{context}" and "{question}" to their original strings
+    text = text.replace(placeholder_context, "{context}").replace(
+        placeholder_question, "{question}"
+    )
+
+    return text
+

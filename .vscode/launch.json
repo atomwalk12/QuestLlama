@@ -39,7 +39,7 @@
             "name": "Python Debugger: Mineflayer",
             "type": "debugpy",
             "request": "launch",
-            "program": "questllama/core/env/bridge.py",
+            "module": "questllama.core.env.bridge",
             "console": "integratedTerminal",
             "justMyCode": false
         },
