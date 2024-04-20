@@ -1,24 +1,12 @@
-from array import array
 from langchain_core.callbacks.manager import CallbackManagerForRetrieverRun
 from langchain_core.vectorstores import VectorStoreRetriever
-from typing import List, Optional
+from typing import List
 from langchain_core.documents import Document
 from ragatouille import RAGPretrainedModel
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 
 import shared.config as Config
 from .base_retriever import QuestllamaBaseRetriever
-import os
-
-import shared.file_utils as U
-from shared import config as C
-from langchain.docstore.document import Document as LangchainDocument
-from langchain_text_splitters import (
-    RecursiveCharacterTextSplitter,
-)
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores.utils import DistanceStrategy
-from transformers import AutoTokenizer
 
 
 class CodeRetriever(QuestllamaBaseRetriever):
@@ -28,23 +16,6 @@ class CodeRetriever(QuestllamaBaseRetriever):
     base_retriever: VectorStoreRetriever = None
     query_type: str
     reranker: RAGPretrainedModel = None
-    JAVASCRIPT_SEPARATORS = [
-        "\nfunction ",
-        "\nconst ",
-        "\nlet ",
-        "\nvar ",
-        "\nclass ",
-        "\nif ",
-        "\nfor ",
-        "\nwhile ",
-        "\nswitch ",
-        "\ncase ",
-        "\ndefault ",
-        "\n\n",
-        "\n",
-        " ",
-        "",
-    ]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -25,8 +25,3 @@ Question: Question: How to craft 1 stone axe in Minecraft?
 
 RESPONSE:
 Answer: To craft 1 stone axe in Minecraft, you will need 3 cobblestones and 2 sticks. Arrange the cobblestones in a horizontal row in the top row of the crafting table, and place 1 stick below the middle cobblestone and another stick below the bottom cobblestone. This will create a stone axe.
-
-{context}
-
-Below is the question:
-{question}

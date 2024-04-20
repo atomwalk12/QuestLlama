@@ -28,6 +28,3 @@ OUTPUT:
 Using the context provided by the following code, identify key concepts and insights that could guide the decomposition of a complex task into smaller, more manageable subtasks. Your main objective is to leverage the logic and patterns within the code to propose a structured approach for breaking down the overall task. This includes understanding the specific requirements implied by the code, the sequence of operations, and any dependencies that could influence the task's organization. Your analysis should culminate in a strategy for task decomposition that enhances planning and execution efficiency.
 {context}
 
-
-Current state and final task: 
-{question}

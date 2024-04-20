@@ -43,13 +43,13 @@ class QuestLlamaLogger:
             # Mark as initialized to prevent further logger setup
             QuestLlamaLogger.logger_initialized = True
 
-    def write_to_file(self, lines):
+    def write_to_file(self, messages):
         """
         Write lines to a file. Used to debug LM Studio prompts.
         """
-        for line in lines:
-            self.log("info", line.type)
-            self.log("info", line.text)
+        for msg in messages:
+            self.log("info", msg.content)
+
 
     def clean_ansi_sequences(self, message: str) -> str:
         """

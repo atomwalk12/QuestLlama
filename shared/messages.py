@@ -14,12 +14,12 @@ class QuestllamaMessage(IMessageWrapper):
 
 
     def __init__(self, message, **kwargs):
-        super().__init__(content=message['result'], **kwargs)
+        super().__init__(content=message, **kwargs)
         self.message = message
     
     @property
     def answer(self):
-        return self.message['result']
+        return self.message
 
 
 class VoyagerMessage(IMessageWrapper):

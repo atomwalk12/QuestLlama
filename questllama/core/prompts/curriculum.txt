@@ -47,7 +47,3 @@ Task: Mine 3 more oak logs.
 Reasoning: Since there is copper ore nearby and the player has already mined some copper ores, it would be beneficial to mine more copper ores to have a good supply for future crafting needs.
 Task: Mine 3 copper ores.
 
-{context}
-
-Current state:
-{question}

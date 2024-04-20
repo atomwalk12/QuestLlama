@@ -11,6 +11,33 @@ Please pay close attention to the following points to avoid repeating past mista
    Concept To complete a task defined by a broad category, first understand the category and then choose any specific item within it to fulfill the requirement. 
    Example: in a task like "Mine 1 wood log," the term "wood log" is a broad category that includes specifics such as oak, birch, or spruce logs. Simply mine any one type from these specifics to successfully complete the task.
 
+2) Mistake: Incorrect use of the callback function in exploreUntil.
+   Concept: Ensure the callback function in asynchronous operations like exploreUntil effectively evaluates and responds to conditions, guiding the flow and outcome of the operation.
+   Example: Writing the callback function incorrectly will result in the bot exploring the environment for 60 seconds, even if a condition specified in the callback is met.
+     - Incorrect usage: 
+        await exploreUntil(bot, new Vec3(Math.floor(Math.random() * 3) - 1, 0, Math.floor(Math.random() * 3) - 1), 60);
+
+        This misuse leads to the bot exploring for the full 60 seconds regardless of any conditions met during exploration.
+
+     - The correct way to use the function is as follows:
+        const woodLogBlock = await exploreUntil(bot, new Vec3(1, 0, 1), 60, () => {{
+            return bot.findBlock({{
+                matching: block => woodLogNames.includes(block.name),
+                maxDistance: 32
+            }});
+        }});
+
+        if (woodLogBlock) {{
+            // Mine the found wood log block
+            await mineBlock(bot, woodLogBlock.name, 1);
+            bot.chat("Wood log mined successfully.");
+        }} else {{
+            // Handle the case where no wood log is found
+            bot.chat("Could not find a wood log within range.");
+        }}
+
+
+        This example provides a clear flow: the exploration stops as soon as a wood log from the specified woodLogNames array is detected within a 32 block radius. If the block is found, it is mined; if not, the bot informs that no suitable block was located. This ensures the bot's actions are efficiently directed by the condition defined in the callback.
 
 ---
 Code Repository:

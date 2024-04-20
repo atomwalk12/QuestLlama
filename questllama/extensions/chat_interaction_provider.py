@@ -1,16 +1,30 @@
-from langchain_core.prompts import PromptTemplate
-from langchain.chains import RetrievalQA
-from langchain_community.llms import Ollama
 from langchain.schema import HumanMessage, SystemMessage
+from questllama.core.retrievers.retriever_factory import CodeRetriever
+from questllama.core.utils.llm_event_handler import LoggerCallbackHandler
 import shared.file_utils as U
-import questllama.core.utils.logger as L
-from questllama.core.retrievers import RetrieverFactory
+import shared.config as C
 from shared import BaseChatProvider
 from shared.messages import QuestllamaMessage
+from langchain.prompts.chat import (
+    ChatPromptTemplate,
+    SystemMessagePromptTemplate,
+)
+from typing import List, Union
+import questllama.core.constants as tasks
+from langchain_community.chat_models.openai import ChatOpenAI
 
 
 class QuestllamaClientProvider(BaseChatProvider):
     """A client provider for Voyager. This class allows you to get a ChatOpenAI client."""
+
+    tasks_simple = [
+        tasks.CRITIC,
+        tasks.SKILL,
+        tasks.CURRICULUM,
+        tasks.CURRICULUM_QA_STEP2_ANSWER_QUESTIONS,
+        tasks.CURRICULUM_QA_STEP1_ASK_QUESTIONS,
+    ]
+    tasks_require_rag = [tasks.ACTION, tasks.CURRICULUM_TASK_DECOMPOSITION]
 
     base_retriever = None
     logger_callback_added = False
@@ -21,42 +35,77 @@ class QuestllamaClientProvider(BaseChatProvider):
             temperature=temperature,
             request_timeout=request_timeout,
         )
-        # self.models = RetrievelSearchModels(skill_library="skill_library")
+        # Parameters
+        chunk_size = 128  # maximum size
+        embeddings = "flax-sentence-embeddings/st-codesearch-distilroberta-base"
+        reranker = "colbert-ir/colbertv2.0"
+        # Create the code retriever
+        self.retriever = CodeRetriever(chunk_size, embeddings, reranker)
 
         # Model is used for reranking during answer_with_rag
-        self.client = self._get_client(model_name, temperature, request_timeout)
+        self.llm = self._get_client(model_name, temperature, request_timeout)
 
-    def generate(self, messages, query_type):
+    def generate(
+        self, messages: List[Union[SystemMessage, HumanMessage]], query_type: str
+    ) -> QuestllamaMessage:
         """Generate messages using the LLM. As backend it defaults to Ollama."""
-        assert isinstance(messages[0], SystemMessage)
+        self.validate_messages(messages)
+        messages = self.apply_smart_replacements(messages)
+        prompt_template = self.create_prompt_template(messages)
+
+        self.llm.callbacks = []
+        self.llm.callbacks += [LoggerCallbackHandler(query_type)]
+
+        if query_type in self.tasks_require_rag:
+            # Initialise RAG parameters
+            rerank = True
+            num_retrieved_docs = 15
+            num_docs_final = 3
+            knowledge_index = (
+                self.retriever.knowledge_index
+            )  # make it clear that knowledge_index is required
+
+            task = self.retriever.get_task(query_type, prompt_template)
+
+            # Answer to the task. Load reranker separately.
+            answer, docs = CodeRetriever.answer_with_rag(
+                task,
+                prompt_template,
+                self.llm,
+                knowledge_index,
+                reranker=self.retriever.reranker if rerank else None,
+                num_retrieved_docs=num_retrieved_docs,
+                num_docs_final=num_docs_final,
+            )
+            return QuestllamaMessage(answer.content)
+        else:
+            # Answer without retrieving rag documents
+            answer = self.llm.invoke(prompt_template.format())
+            return QuestllamaMessage(answer.content)
+
+    def validate_messages(self, messages: List[Union[SystemMessage, HumanMessage]]):
+        assert isinstance(
+            messages[0], SystemMessage
+        ), "First message must be a SystemMessage"
         for message in messages[1:]:
-            assert isinstance(message, HumanMessage)
+            assert isinstance(
+                message, HumanMessage
+            ), "Following messages must be HumanMessages"
 
-        retriever = RetrieverFactory.create_retriever("code_search", query_type)
-        # retriever = self.models.get_retriever(query_type=query_type)
-        messages[0].content = U.smart_replace_braces(messages[0].content)
-        messages[1].content = U.smart_replace_braces(messages[1].content)
+    def apply_smart_replacements(
+        self, messages: List[Union[SystemMessage, HumanMessage]]
+    ) -> List[Union[SystemMessage, HumanMessage]]:
+        for message in messages:
+            message.content = U.smart_replace_braces(message.content)
+        return messages
 
-        # The context contains the fetched js functions
-        QA_CHAIN_PROMPT = PromptTemplate(
-            input_variables=["context", "question"],
-            template=messages[0].content,  # system prompt
+    def create_prompt_template(
+        self, messages: List[Union[SystemMessage, HumanMessage]]
+    ):
+        return ChatPromptTemplate.from_messages(
+            [SystemMessagePromptTemplate.from_template(messages[0].content)]
+            + messages[1:]
         )
-
-        qa_chain = RetrievalQA.from_chain_type(
-            self.client,
-            retriever=retriever,
-            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT},
-            return_source_documents=True,
-        )
-
-        # the query is the question defined above
-        self.result = qa_chain(
-            {"query": "\n".join([obj.content for obj in messages])},
-            callbacks=[L.LoggerCallbackHandler(query_type=query_type)],
-        )  # user prompt
-
-        return QuestllamaMessage(self.result)
 
     def _get_client(self, model_name="gpt-4", temperature=0.0, request_timeout=120):
         """
@@ -64,6 +113,12 @@ class QuestllamaClientProvider(BaseChatProvider):
         The handle is used to redirect output to stdout during the output generation.
         """
 
-        return Ollama(
-            temperature=temperature, model=model_name, timeout=request_timeout
+        return ChatOpenAI(
+            base_url="http://localhost:11434/v1",
+            api_key="ollama",  # required, but unused
+            temperature=temperature,
+            streaming=True,
+            callbacks=[],
+            request_timeout=request_timeout,
+            model=C.MODEL,
         )

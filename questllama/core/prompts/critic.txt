@@ -143,7 +143,3 @@ RESPONSE
     "critique": "Deposit more useless items such as copper_block, diorite, granite, cobbled_deepslate, feather, and leather to meet the requirement of having only 20 occupied slots in your inventory."
 }}
 
-{context}
-
-Current state and objective: 
-{question}

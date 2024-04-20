@@ -7,7 +7,7 @@ from langchain_core.messages import BaseMessage
 from langchain_core.outputs import LLMResult
 from tokenizers import Tokenizer
 from questllama.core.utils.logger import QuestLlamaLogger
-
+from transformers import LlamaForCausalLM, LlamaTokenizer
 import shared.config as C
 
 
@@ -32,8 +32,9 @@ class LoggerCallbackHandler(BaseCallbackHandler):
         **kwargs: Any,
     ) -> None:
         """Run when LLM starts running."""
+        # TODO Razvan fix
         self.logger.write_to_file(messages[0])
-        num_tokens = self.log_token_count(messages[0])
+        num_tokens = self.log_token_count(messages[0][0])
         assert num_tokens < C.CONTEXT_SIZE
 
     def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
@@ -86,7 +87,7 @@ class LoggerCallbackHandler(BaseCallbackHandler):
 
     def log_token_count(self, text):
         """Log to the Questllama log file message token count."""
-        num_tokens = len(self.tokenizer.encode(text, add_special_tokens=True))
+        num_tokens = len(self.tokenizer.encode(text.content, add_special_tokens=True))
 
         self.logger.log(
             "info", f"Context window OK: {num_tokens} < {C.CONTEXT_SIZE}"
