@@ -39,6 +39,18 @@ Please pay close attention to the following points to avoid repeating past mista
 
         This example provides a clear flow: the exploration stops as soon as a wood log from the specified woodLogNames array is detected within a 32 block radius. If the block is found, it is mined; if not, the bot informs that no suitable block was located. This ensures the bot's actions are efficiently directed by the condition defined in the callback.
 
+3) Mistake: Creation of multiple functions taking bot as the only argument.
+   Concept: Develop a single function where 'bot' is the sole parameter. You should not create more than one function with its only argument 'bot'.
+
+4) Modifying a constant variable (defined using const).
+   Concept: A variable declared as a constant (const) cannot be changed after its initial assignment. Use let if you anticipate needing to change the variable's value.
+   Example: The following code results in an error because it attempts to modify a constant:
+    const oakPlankCount = 2;
+    oakPlankCount--;
+
+   To correctly allow modifications, declare the variable with let:
+    let oakPlankCount = 2;
+
 ---
 Code Repository:
 

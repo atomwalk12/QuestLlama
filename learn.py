@@ -18,6 +18,7 @@ if __name__ == "__main__":
         chat_provider=chat_provider_class,
         azure_login=azure_login,
         openai_api_key=openai_api_key,
+        resume=True,
     )
 
     # start lifelong learning

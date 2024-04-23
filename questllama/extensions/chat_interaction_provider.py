@@ -11,7 +11,7 @@ from langchain.prompts.chat import (
 )
 from typing import List, Union
 import questllama.core.constants as tasks
-from langchain_community.chat_models.openai import ChatOpenAI
+from langchain_openai import ChatOpenAI
 
 
 class QuestllamaClientProvider(BaseChatProvider):

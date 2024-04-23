@@ -7,7 +7,7 @@ from langchain.prompts.chat import (
 )
 from transformers import AutoTokenizer
 from langchain_core.documents import Document
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores.utils import DistanceStrategy
 import os
@@ -203,14 +203,15 @@ class CodeRetriever:
         """
         Extracts task description from a given query string.
         """
-        msg = prompt_template[1].content
-
-        pattern = r"Task:.*\n" if query_type == tasks.ACTION else r"Final task:.*"
-        match = re.search(pattern, msg)
-        if match:
-            extracted_text = (
-                match.group()[6:] if query_type == tasks.ACTION else match.group()[12:]
-            )
+        msgs = prompt_template[1:]
+        for msg in msgs.messages:
+            pattern = r"Task:.*\n" if query_type == tasks.ACTION else r"Final task:.*"
+            match = re.search(pattern, msg.content)
+            if match:
+                extracted_text = (
+                    match.group()[6:] if query_type == tasks.ACTION else match.group()[12:]
+                )
+                break
 
         assert len(extracted_text) > 2
         return extracted_text

@@ -6,6 +6,12 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
-  "jupyter.debugJustMyCode": false
+  "jupyter.debugJustMyCode": false,
+  "terminal.integrated.fontSize": 18,
+  "cSpell.words": [
+    "CMAP",
+    "gattipg",
+    "vectordb"
+  ],
 }
 

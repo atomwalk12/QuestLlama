@@ -6,3 +6,4 @@ langchainhub
 chromadb
 gpt4all
 rank_bm25
+langchain-openai
