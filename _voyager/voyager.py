@@ -33,7 +33,7 @@ class Voyager:
         action_agent_show_chat_log: bool = True,
         action_agent_show_execution_error: bool = True,
         curriculum_agent_model_name: str = "gpt-4",
-        curriculum_agent_temperature: float = 0,
+        curriculum_agent_temperature: float = 0.1,
         curriculum_agent_qa_model_name: str = "gpt-3.5-turbo",
         curriculum_agent_qa_temperature: float = 0,
         curriculum_agent_warm_up: Dict[str, int] = None,

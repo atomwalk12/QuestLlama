@@ -51,6 +51,21 @@ Please pay close attention to the following points to avoid repeating past mista
    To correctly allow modifications, declare the variable with let:
     let oakPlankCount = 2;
 
+5) Mistake: While creating new items a crafting table needs to be placed on the ground nearby.
+   Concept: The correct way of crafting an item is by checking if there is a 'crafting_table' in the inventory. If there is, it should be placed near the player using 'placeItem(bot, "crafting_table", bot.entity.position.offset(1, 0, 0));'. If there is no 'crafting_table' in the inventory it must be created using 3 oak logs and 2 sticks.
+   Example: let craftingTableCount = bot.inventory.count(mcData.itemsByName.crafting_table.id);
+            if (craftingTableCount < 1) {{
+              await craftItem(bot, "crafting_table", 1); // this requires 3 oak logs and 2 sticks
+              bot.chat("Crafted a crafting table.");
+            }}
+
+            // Place the crafting table near the player
+            const craftingTablePosition = bot.entity.position.offset(1, 0, 0);
+            await placeItem(bot, "crafting_table", craftingTablePosition);
+
+            // Now you can craft any item using the 'craftItem' function
+            ...
+
 ---
 Code Repository:
 
@@ -95,7 +110,7 @@ You should then respond to me with:
 Explain (if applicable): Are there any steps missing in your plan? Why does the code not complete the task? What does the chat log and execution error imply?
 Plan: How to complete the task step by step. You should pay attention to Inventory since it tells what you have. The task completeness check is also based on your final inventory.
 Code:
-    1) Write an async function taking the bot as the only argument.
+    1) Write only one async function taking the bot as the only argument.
     2) Reuse the above useful programs as much as possible.
         - Use `mineBlock(bot, name, count)` to collect blocks. Do not use `bot.dig` directly.
         - Use `craftItem(bot, name, count)` to craft items. Do not use `bot.craft` or `bot.recipesFor` directly.

@@ -19,7 +19,7 @@ class CurriculumAgent:
     def __init__(
         self,
         model_name="gpt-3.5-turbo",
-        temperature=0,
+        temperature=0.1,
         qa_model_name="gpt-3.5-turbo",
         qa_temperature=0,
         request_timout=120,
@@ -215,7 +215,7 @@ class CurriculumAgent:
         observation = self.render_observation(
             events=events, chest_observation=chest_observation
         )
-        # Todo Questllama bione check in run_qa_step1_ask_questions (CURRICULUM_QA_STEP1_ASK_QUESTIONS)
+        # Todo Questllama biome check in run_qa_step1_ask_questions (CURRICULUM_QA_STEP1_ASK_QUESTIONS)
         if self.progress >= self.warm_up["context"]:
             questions, answers = self.run_qa(
                 events=events, chest_observation=chest_observation

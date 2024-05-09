@@ -242,7 +242,7 @@ async function craftItem(bot, name, count = 1) {
         maxDistance: 32,
     });
     if (!craftingTable) {
-        bot.chat("Craft without a crafting table");
+        bot.chat("A crafting table needs to be nearby to start crafting. First call placeItem(bot, \"crafting_table\", bot.entity.position.offset(1, 0, 0)); to place a crafting table near the bot.");
     } else {
         await bot.pathfinder.goto(
             new GoalLookAtBlock(craftingTable.position, bot.world)
