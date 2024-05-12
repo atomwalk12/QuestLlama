@@ -1,0 +1,3 @@
+async function mineTwoCoalOres(bot) {
+    // The function is about mining two coal ores by exploring the environment in random directions until finding a coal ore block, then mining it and repeating the process until two coals are obtained.
+}

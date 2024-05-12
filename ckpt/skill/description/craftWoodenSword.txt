@@ -1,0 +1,3 @@
+async function craftWoodenSword(bot) {
+    // The function crafts a wooden sword by first gathering necessary materials such as sticks and oak planks, then crafting a crafting table if not already available, placing it, and finally using the crafting table to craft the wooden sword.
+}

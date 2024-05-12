@@ -1,0 +1,3 @@
+async function obtainBirchLogs(bot) {
+    // The function is about obtaining 2 birch logs by exploring and mining nearby birch trees, and it repeats this process until it has the required amount of logs.
+}

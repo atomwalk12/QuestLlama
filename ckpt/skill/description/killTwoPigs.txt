@@ -1,0 +1,3 @@
+async function killTwoPigs(bot) {
+    // The function kills two pigs using a wooden pickaxe by finding the nearest pig, killing it, collecting the dropped items, and repeating this process until two pigs are killed.
+}

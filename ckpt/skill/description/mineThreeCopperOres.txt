@@ -1,0 +1,3 @@
+async function mineThreeCopperOres(bot) {
+    // The function is about mining three copper ores by randomly exploring the environment, finding a copper ore block, and then mining it.
+}

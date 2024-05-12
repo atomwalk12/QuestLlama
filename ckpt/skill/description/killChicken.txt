@@ -1,0 +1,3 @@
+async function killChicken(bot) {
+    // The function is about killing a chicken using a wooden pickaxe. First, it checks if a wooden pickaxe is in the inventory and crafts one if not available. Then, it equips the wooden pickaxe and explores the environment until finding a chicken within a range of 32 blocks. Once a chicken is found, it kills the chicken using the equipped wooden pickaxe.
+}

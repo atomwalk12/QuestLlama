@@ -1,0 +1,3 @@
+async function craftOakPlanks(bot) {
+    // The function crafts oak planks by first finding and mining oak logs until it has at least one, then crafting four oak planks from the mined oak logs.
+}

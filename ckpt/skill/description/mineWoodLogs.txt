@@ -1,0 +1,3 @@
+async function mineWoodLogs(bot) {
+    // The function is about collecting 25 wood logs by mining oak trees using a wooden axe.
+}

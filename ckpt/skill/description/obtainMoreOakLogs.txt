@@ -1,0 +1,3 @@
+async function obtainMoreOakLogs(bot) {
+    // The function is about collecting 3 oak logs by exploring the environment to find oak trees, mining them, and counting the collected oak logs until reaching a total of 3.
+}

@@ -1,0 +1,3 @@
+async function mineIronOre(bot) {
+    // The function is about mining one iron ore block using a stone pickaxe. First, it places a crafting table near the bot and crafts a stone pickaxe if not already in inventory. Then, it explores the environment until finding an iron ore block, mines the block, and saves the event of mining one iron ore.
+}

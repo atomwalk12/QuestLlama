@@ -1,0 +1,3 @@
+async function mineTwoIronOres(bot) {
+    // The function is about mining two iron ore blocks by exploring the environment in random directions until finding an iron ore block, then mining it.
+}

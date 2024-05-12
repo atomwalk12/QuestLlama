@@ -1,0 +1,3 @@
+async function mineMoreOakLogs(bot) {
+    // The function is about mining more oak logs using a wooden pickaxe, first checking if there's an axe in the inventory and crafting one if needed, then exploring until finding an oak tree and mining 3 more oak logs.
+}

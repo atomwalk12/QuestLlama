@@ -1,0 +1,3 @@
+async function mineThreeLilacs(bot) {
+    // The function is about mining three lilac blocks by exploring the environment in random directions until finding a lilac block, then mining it.
+}
