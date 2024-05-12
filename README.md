@@ -4,7 +4,7 @@ Welcome to QuestLlama, a project inspired by Voyager that aims to create an alte
 
 **Project Overview**
 
-QuestLlama combines the power of LLaMA 3 models with the popular Minecraft game to create a unique and interactive experience. Our agent is designed to explore, learn, and adapt to its environment without human intervention. By leveraging the capabilities of LLaMA 3 models, we can create an autonomous agent that can perform complex tasks and make novel discoveries.
+QuestLlama combines the power of LLaMA 3 models with the popular Minecraft game to create a unique and interactive experience. Our agent is designed to explore, learn, and adapt to its environment without human intervention. By leveraging the capabilities of LLaMA 3 models, we can create an autonomous agent that can perform complex tasks and explore Minecraft.
 
 **Key Features**
 
@@ -20,20 +20,14 @@ To get started with QuestLlama, please follow these steps:
 2. Clone our repository and navigate to the project directory.
 3. Follow the instructions in our README files to set up and run the agent.
 
-**Documentation and Resources**
+**Installation process**
 
-For more information on QuestLlama, please refer to our documentation and resources:
+First of all follow the installation instructions found at [Voyager](https://github.com/MineDojo/Voyager) repository.
 
-* [README.md](README.md): A comprehensive guide to setting up and running QuestLlama.
-* [FAQ.md](FAQ.md): Frequently asked questions and answers about Voyager.
-* [learn.py](learn.py): The core script that powers the autonomous agent.
+**Now to setup the environment for QuestLlama**
+Please note that both Voyager and QuestLlama require Python 3.9. The easiest way to get up and running with a local environment is to use Anaconda. Follow the instructions at https://docs.anaconda.com/free/anaconda/install/index.html to install Anaconda.
+After the installation follow these steps to setup your local environment:
 
-**Contributing**
-
-We welcome contributions to QuestLlama! If you're interested in helping us improve the project, please refer to our contributing guide for more information on how to get involved.
-
-**License**
-
-QuestLlama is licensed under the MIT License. See [LICENSE](LICENSE) for more details.
-
-Thank you for your interest in QuestLlama!
+> conda create -n questllama python=3.9.19
+> conda activate questllama
+- python install.py
