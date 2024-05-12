@@ -31,6 +31,9 @@ First of all follow the installation instructions found at [Voyager](https://git
 Please note that both Voyager and QuestLlama require Python 3.9. The easiest way to get up and running with a local environment is to use Anaconda. Follow the instructions at the [Anaconda homepage](https://docs.anaconda.com/free/anaconda/install/index.html) to install Anaconda.
 After the installation follow these steps to setup your local environment:
 
-> conda create -n questllama python=3.9.19
-> conda activate questllama
-> python install.py
+
+```console
+conda create -n questllama python=3.9.19
+conda activate questllama
+python install.py
+```
