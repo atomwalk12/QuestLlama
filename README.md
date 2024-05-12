@@ -37,3 +37,6 @@ conda create -n questllama python=3.9.19
 conda activate questllama
 python install.py
 ```
+
+**Restart Learning**
+To restart with a brand new character the learning process simply rename the ```ckpt``` directory and remove the ```resume=True``` flag in learn.py.

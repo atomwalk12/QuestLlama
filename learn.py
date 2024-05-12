@@ -19,6 +19,7 @@ if __name__ == "__main__":
         azure_login=azure_login,
         openai_api_key=openai_api_key,
         resume=True,
+        max_iterations=180,
     )
 
     # start lifelong learning
