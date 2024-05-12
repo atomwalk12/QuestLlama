@@ -2,6 +2,9 @@
 
 Welcome to QuestLlama, a project inspired by Voyager that aims to create an alternative to paid subscription-based AI models like ChatGPT. Our goal is to build an autonomous agent in Minecraft using open-source LLaMA 3 models.
 
+**Run Demo**
+Check the agent in action [on Youtube](https://www.youtube.com/watch?v=Yi1C9vs1BWM).
+
 **Project Overview**
 
 QuestLlama combines the power of LLaMA 3 models with the popular Minecraft game to create a unique and interactive experience. Our agent is designed to explore, learn, and adapt to its environment without human intervention. By leveraging the capabilities of LLaMA 3 models, we can create an autonomous agent that can perform complex tasks and explore Minecraft.
