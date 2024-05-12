@@ -25,7 +25,7 @@ To get started with QuestLlama, please follow these steps:
 
 **Installation process**
 
-First of all follow the installation instructions found at [Voyager](https://github.com/MineDojo/Voyager) repository.
+First of all follow the installation instructions found at [Voyager](https://github.com/MineDojo/Voyager) repository. Note that for convenience the required mods needed to use the agent are available under ```installation/questllama/mods directory```.
 
 **Now to setup the environment for QuestLlama**
 Please note that both Voyager and QuestLlama require Python 3.9. The easiest way to get up and running with a local environment is to use Anaconda. Follow the instructions at the [Anaconda homepage](https://docs.anaconda.com/free/anaconda/install/index.html) to install Anaconda.
