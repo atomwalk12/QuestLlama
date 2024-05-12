@@ -25,7 +25,7 @@ To get started with QuestLlama, please follow these steps:
 For more information on QuestLlama, please refer to our documentation and resources:
 
 * [README.md](README.md): A comprehensive guide to setting up and running QuestLlama.
-* [FAQ.md](FAQ.md): Frequently asked questions and answers about QuestLlama.
+* [FAQ.md](FAQ.md): Frequently asked questions and answers about Voyager.
 * [learn.py](learn.py): The core script that powers the autonomous agent.
 
 **Contributing**
