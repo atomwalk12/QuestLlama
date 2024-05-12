@@ -1,3 +1,0 @@
-PARAMETER top_p 0.8
-PARAMETER repeat_penalty 1.05
-PARAMETER top_k 20
