@@ -1,3 +1,6 @@
+https://github.com/atomwalk12/QuestLlama/assets/146588815/cdba11c8-893d-4b46-81f4-dab179fb0ec9
+
+
 **QuestLlama: An Autonomous Agent in Minecraft**
 
 Welcome to QuestLlama, a project inspired by Voyager that aims to create an alternative to paid subscription-based AI models like ChatGPT. Our goal is to build an autonomous agent in Minecraft using open-source LLaMA 3 models.
