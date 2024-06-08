@@ -12,6 +12,20 @@ Check the agent in action [on Youtube](https://www.youtube.com/watch?v=Yi1C9vs1B
 
 QuestLlama combines the power of LLaMA 3 models with the popular Minecraft game to create a unique and interactive experience. Our agent is designed to explore, learn, and adapt to its environment without human intervention. By leveraging the capabilities of LLaMA 3 models, we can create an autonomous agent that can perform complex tasks and explore Minecraft.
 
+**Directory Structure**
+
+```md
+├── voyager/                            # voyager root directory
+├── questllama/                         # questllama root directory
+│   ├── core/                           # module internal functions
+│   |   |── prompts/                    # system prompts
+│   |   └── retriever_factory/          # RAG retrieval
+│   ├── extensions/                     # functions used from outside the module
+│   |   ├── chat_interactions.py        # main module functions 
+│   └── skill_library/                  # functions used for RAG retrieval
+└── shared/                             # functions called from both modules
+```
+
 **Key Features**
 
 * Autonomous exploration: QuestLlama's agent explores the Minecraft world, acquires new skills, and makes discoveries without human intervention.
